@@ -1,0 +1,105 @@
+﻿@model eBanking.Models.VendorTransaction
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>VendorTransaction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VendorId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VendorId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VendorTarrifId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VendorTarrifId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountInLocal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountInLocal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountOutLocal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountOutLocal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsedCurrencyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsedCurrencyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ConversionRateUSD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConversionRateUSD)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountInUSD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountInUSD)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountOutUSD)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountOutUSD)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "BulkPinActivation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-center page-header">Bulk Pin Activation</h3>
+<div class="container">
+    @using (Html.BeginForm("BulkPinActivation", "Pin", FormMethod.Get, new { @class = "form-horizontal" }))
+    {
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search
+            </span>
+            <div class="bordered-container-inner">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="PinPrefix" class="control-label col-md-2">Pin Prefix</label>
+                        <div class="col-md-3">
+                            @Html.DropDownList("PinPrefix", ViewData["PinPrefixes"] as SelectList, "--Select Pin Prefix--", new { @class = "form-control pin-prefix-dropdown" })
+                        </div>
+                        <label class="control-label col-md-2"> &nbsp;</label>
+                        <div class="col-md-3">
+                            @*@Html.DropDownList("Confirmed", ViewData["ActionType"] as SelectList, "--Select action--", new { @class = "form-control pin-prefix-dropdown" })*@
+                            <input type="submit" class="btn btn-primary" name="Submit" id="Submit" value="Search" />
+                        </div>
+                        @*<div class="col-md-1">
+                            <input type="submit" class="btn btn-primary" name="f5" id="f5" value="Submit" />
+                        </div>*@
+                    </div>
+                    <div class="form-group">
+                        <label for="serialStart" class="control-label col-md-2">Serial From</label>
+                        <div class="col-md-3">
+                            @Html.TextBox("serialStart", "", new { @class = "form-control", value = ViewBag.serialStart })
+                        </div>
+                        <label for="serialEnd" class="control-label col-md-2">Serial To</label>
+                        <div class="col-md-2">
+                            @Html.TextBox("serialEnd", "", new { @class = "form-control", value = ViewBag.serialEnd })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        if (ViewBag.ActivatedPins != null && ViewBag.ActivatedPins > 0)
+        {
+            <div class="alert alert-success">Total @ViewBag.ActivatedPins pin/s are successfully activated.</div>
+        }
+        else if (ViewBag.PinQuantity != null && ViewBag.PinQuantity > 0)
+        {
+            <div class="container">
+                <div class="bordered-container">
+                    <span class=" border-title">
+                        Activation Information
+                    </span>
+
+                    <div class="bordered-container-inner">
+                        @ViewBag.PinQuantity pins are found in the provided range.
+                        <br />
+                        <br />
+                        @ViewBag.ActivePinQuantity pins are already active.
+                        <br />
+                        <br />
+                        @ViewBag.InactivePinQuantity pins are available for activation.
+                    </div>
+                    @if (ViewBag.InactivePinQuantity > 0)
+                    {
+                        <input type="submit" class="btn btn-warning" name="Submit" id="Submit" value="Activate Pins" />
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
+
+
+

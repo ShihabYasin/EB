@@ -1,0 +1,54 @@
+﻿@model eBanking.Models.CurrencyViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Currency</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Details
+        </span>
+        <div class="bordered-container-inner">
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.DestinationName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DestinationName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrencyName)                   
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrencyName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ISO)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ISO)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Sign)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Sign)
+                </dd>
+            </dl>
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning btn-xs" })
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+            </p>
+        </div>
+    </div>
+</div>

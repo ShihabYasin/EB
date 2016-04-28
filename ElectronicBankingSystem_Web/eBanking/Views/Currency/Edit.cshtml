@@ -1,0 +1,74 @@
+﻿@model eBanking.Models.Currency
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Currency</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class="border-title">
+            Edit Currency
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrencyName, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.CurrencyName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CurrencyName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ISO, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.ISO, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ISO)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DestinationId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+
+                           
+                            @Html.DropDownListFor(model => model.DestinationId, ViewData["destination"] as SelectList, "--Select a Country--", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.DestinationId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Sign, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Sign, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Sign)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-success" />
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>*@
+                </div>
+            }
+            <div>
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+            </div>
+        </div>
+    </div>
+</div>

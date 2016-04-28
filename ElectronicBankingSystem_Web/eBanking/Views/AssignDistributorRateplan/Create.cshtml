@@ -1,0 +1,96 @@
+﻿@model eBanking.Models.AssignDistributorRateplan
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    
+    @using (Html.BeginForm()) 
+    {
+        @Html.AntiForgeryToken()
+        
+        <div class="form-horizontal">
+            <h4>AssignDistributorRateplan</h4>
+            <hr />
+            @Html.ValidationSummary(true)
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.RateplanId, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RateplanId)
+                    @Html.ValidationMessageFor(model => model.RateplanId)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.DistributorId, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DistributorId)
+                    @Html.ValidationMessageFor(model => model.DistributorId)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.IsActive)
+                    @Html.ValidationMessageFor(model => model.IsActive)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedBy, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CreatedBy)
+                    @Html.ValidationMessageFor(model => model.CreatedBy)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedOn, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CreatedOn)
+                    @Html.ValidationMessageFor(model => model.CreatedOn)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.UpdatedBy, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UpdatedBy)
+                    @Html.ValidationMessageFor(model => model.UpdatedBy)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.UpdatedOn, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UpdatedOn)
+                    @Html.ValidationMessageFor(model => model.UpdatedOn)
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<eBanking.Models.DistributorCommissionRateplan>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AssignDistributor</title>
+</head>
+<body>
+    <div class="container" id="DistributorCommissionRateplan">
+        <h1 class="text-center page-header">Assign Rateplan</h1>
+            
+        
+        @using (Html.BeginForm("AssignDistributor", "DistributorCommissionRateplan", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="bordered-container">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Service Name
+                        </th>
+                        <th>
+                            Comission Rate
+                        </th>
+                        <th>
+                            Assign To
+                            @*<br />
+                            @Html.DropDownList("DestributorCode", new SelectList(allDistributors, "DistributorCode", "UserName"), "select user", new { onchange = "GetSelectedItem(this.value)" })
+                            <br />*@
+                            @*@Html.CheckBox("ID", new { type = "checkbox", onchange = "checkAll(this)" })*@
+                        </th>
+                    </tr>
+                    @foreach(var item in Model)
+                    {
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.ServiceId)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.Commission)
+                            </th>
+                            <th>
+                                @Html.DropDownList("UserName", ViewBag.UserName as SelectList, "Select a Distributor", new { @class = "form-control" })
+                            </th>
+                        </tr>
+                        }
+                    </table>
+                </div>
+            }
+            </div>
+
+    </body>
+    </html>
+            

@@ -1,0 +1,91 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.Destination>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+<h3 class="text-center page-header">Destination</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class="border-title">
+            Registered Destinations
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table table-striped no-margin">
+                <tr>
+                    <th>
+                        Sr no
+                    </th>
+                    <th>
+                        DestinationName
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        IsActive
+                    </th>
+                    <th>@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs  btn-success btn-create" })</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    i=item.Id;   
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DestinationName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.TextBox("itemsPerPage", "", new { @class = "form-control", style = "display:none", value = ViewBag.ItemsPerPage })
+            <table class="table center-table borderless">
+                <tr>
+                    <td></td>
+                    <th class="text-center">
+                        page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        <br />
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, itemsPerPage = ViewBag.ItemsPerPage }))
+                    </th>
+                    <th>
+                        Item Per Page
+                        <br />
+                        @using (Html.BeginForm("Index", "Destination", FormMethod.Get, new { @class = "form-horizontal" }))
+                        { 
+                            @Html.TextBox("page", "", new { @class = "form-control", style = "display:none", value = Model.PageNumber })
+                            @Html.DropDownList("itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control", style = "margin-top:10px;", onchange = "this.form.submit()" })
+                        }
+                    </th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var itemsPerPage = '@ViewBag.ItemsPerPage';
+        if (!isNaN(itemsPerPage) && itemsPerPage > 0)
+            $("#pagination-itemsPerPage").val(itemsPerPage);
+    });
+    //$("#pagination-itemsPerPage").change(function () {
+    //    $("#itemsPerPage").val($("#pagination-itemsPerPage option:selected").val());
+    //});
+</script>
+

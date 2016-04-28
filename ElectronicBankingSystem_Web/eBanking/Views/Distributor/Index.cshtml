@@ -1,0 +1,276 @@
+﻿@using PagedList.Mvc;
+@model eBanking.Models.PinViewModelTotal 
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+    if (Model != null)
+    {
+        i = (Model.PinViewModel.PageNumber - 1) * Model.PinViewModel.PageSize;
+    }
+}
+
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<style>
+    .own {
+        background-color:rgba(132, 255, 132, 0.62);
+    }
+    .ownBySub {
+        background-color: rgba(255, 0, 0, 0.7);
+        color: #ffffff;
+    }
+</style>
+
+
+<div class="container" id="ManageTransferPage">
+    <h3 class="text-center page-header">Distributor</h3>
+
+    @using (Html.BeginForm("Index", "Distributor", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                <a href="#" id="search-span">Search</a> | 
+                <a href="#" id="assign-span">Assign to Sub-Distributor</a>
+            </span>
+            <div class="bordered-container-inner">
+                <div class="form-inline search-span">
+                    <div class="form-group form-group-restricted">
+                        <label for="DistributorCode">Pin Prefix</label>
+                        @Html.DropDownList("Prefix", @ViewBag.Prefixes as SelectList, "--Select Prefix--", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="SerialNo">Pin Serial No</label>
+                        @Html.TextBox("SerialNo", "", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="SerialNoTo">Pin Serial No(End of Range)</label>
+                        @Html.TextBox("SerialNoTo", "", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group form-group-restricted">
+                        <label for="BatchNo">Batch No</label>
+                        @Html.TextBox("BatchNo", "", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group form-group-restricted">
+                        <label for="PinCode">Pin Code</label>
+                        @Html.TextBox("PinCode", "", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="Status">Status</label>
+                        @Html.DropDownList("Status", @ViewBag.Statuses as SelectList, "--Select Status--", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="FromDate">From Date</label>
+                        @Html.TextBox("FromDate", "", new { @class = "form-control pickDate" })
+
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="ToDate">To Date</label>
+                        @Html.TextBox("ToDate", "", new { @class = "form-control pickDate" })
+
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label> &nbsp;</label>
+                        <input type="submit" class="form-control btn btn-primary" name="Submit" id="Submit" value="Search" />
+
+                    </div>
+                </div>
+                @if (Model.TotalPins >= 1 && Model.TotalPinValue > 0)
+                {
+                <div class="form-inline alert-warning assign-span" style="margin-top:10px;">
+                    <div class="form-group form-group-restricted">
+                        <label for="totalPins">Total Pins : </label>
+                        <strong class="form-control">@Model.TotalPins</strong>
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="totalPinValue">Total Pin Value : </label>
+                        <strong class="form-control">@Model.TotalPinValue</strong>
+                    </div>
+                    @*<div class="form-group form-group-restricted">
+                        <label for="DistributorCode">Assign To : </label>
+                        @Html.DropDownList("DistributorCode", @ViewBag.SubDistributors as SelectList, "--Select Distributor--", new { @class = "form-control" })
+                    </div>*@
+                    <div class="form-group form-group-restricted">
+                        <label> &nbsp;</label>
+                        <input type="submit" class="form-control btn btn-warning" name="Submit" id="Submit" value="Assign" />
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label> &nbsp;</label>
+                        <input type="submit" class="form-control btn btn-success" name="Submit" id="Submit" value="Return" />
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    }
+    @if (ViewBag.Message != null || !string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert-info">
+            @ViewBag.Message
+        </div>
+    }
+    
+
+    @if (Model != null)
+    {
+        <div class="bordered-container">
+            <span class=" border-title">
+                Available Pin List
+            </span>
+            <div class="bordered-container-inner">
+                <table class="table no-margin">
+                    <tr>
+                        <th>
+                            Sr No
+                        </th>
+                        <th>
+                            Create Date
+                        </th>
+                        <th>
+                            Batch No
+                        </th>
+                        <th>
+                            Pin Serial No
+                        </th>
+                        <th>
+                            Pin Code
+                        </th>
+                        <th>
+                            Value
+                        </th>
+                        <th>
+                            Currency Name
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Is Active
+                        </th>
+                        @*<th>
+
+                        </th>*@
+
+                    </tr>
+
+                    @foreach (var item in Model.PinViewModel)
+                    {
+                        i++;
+                        if(item.DistributorCode == @ViewBag.CurrentDistributorCode)
+                        {
+                            <tr class="own">
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreationDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BatchNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SerialNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PinCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Value)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CurrencyName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                </td>
+
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="ownBySub">
+                                
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreationDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BatchNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SerialNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PinCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Value)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CurrencyName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                </td>
+
+                                @*<td>
+                                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                                    </td>*@
+                            </tr>
+                        }
+
+
+                    }
+
+                </table>
+                <table class="table center-table borderless">
+                    <tr>
+                        <td></td>
+                        <th class="text-center">
+                            Page @(Model.PinViewModel.PageCount < Model.PinViewModel.PageNumber ? 0 : Model.PinViewModel.PageNumber) of @Model.PinViewModel.PageCount
+                            <br />
+                            @Html.PagedListPager(Model.PinViewModel, page => Url.Action("Index", new { page }))
+                        </th>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+    else if (@ViewBag.Message != null)
+    {
+        <div class="alert alert-info">@ViewBag.Message</div>
+    }
+    else
+    {
+        <div class="alert alert-danger">Sorry, No pins found.<br />Please try searching with different parameters or contact Administrator.</div>
+    }
+    @*<div class="container">*@
+    </div>
+
+@*</div>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#wrapper").addClass("toggled");
+        $(".assign-span").hide();
+    });
+    $("#search-span, #assign-span").on("click", function () {
+        $(".search-span, .assign-span").slideToggle("slow");
+    });
+    $(" .pickDate").datepicker();
+</script>

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<eBanking.Models.VendorTarrif>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-center page-header">Vendor Tarrif</h3>
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Vendor Tarrif
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table table-striped no-margin">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VendorId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ConversionRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsPercentage)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cost)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Refference)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedOn)
+                    </th>
+                    <th>@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs  btn-success btn-create" })</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ConversionRate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsPercentage)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cost)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Refference)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.TarrifId }, new { @class = "btn btn-warning btn-xs" })
+                            @Html.ActionLink("Details", "Details", new { id = item.TarrifId }, new { @class = "btn btn-primary btn-xs" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id=item.TarrifId })*@
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            </div>
+        </div>
+    </div>

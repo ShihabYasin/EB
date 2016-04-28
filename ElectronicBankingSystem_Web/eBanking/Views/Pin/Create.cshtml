@@ -1,0 +1,118 @@
+﻿@model eBanking.Models.Pin
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Pin</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Create New Pin
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+
+              
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Value, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Value, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Value)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceId, new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.ServiceId, ViewData["Services"] as SelectList, "--Please select a Service--", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.ServiceId)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrencyID, new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">                           
+                            @Html.DropDownListFor(model => model.CurrencyID, ViewData["Currency"] as SelectList, "--Please select a Currency--", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.CurrencyID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                         @Html.Label("Quantity", new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                           
+                            @Html.TextBox("Number",null, new { @class = "form-control" })       @*number of pins*@
+                            @Html.ValidationMessage("Number")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Pin Prefix", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("PinPrefix", ViewData["PinPrefixes"] as SelectList, "--Select Pin Prefix--", new { @class = "form-control pin-prefix-dropdown" })
+                            @Html.TextBox("PinPrefix", "", new { disabled = "disabled", @class = "form-control pin-prefix-textBox", style = "display:none" })
+                            @Html.CheckBox("AddPinPrefix", false) Add New Pin Prefix
+                            @Html.ValidationMessage("PinPrefix")
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Distributor", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                           @Html.DropDownList("DistributorCode", ViewData["Distributor"] as SelectList, "--Select a User--", new { @class = "form-control" })
+                           @Html.ValidationMessage("DistributorCode")
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+ 
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#AddPinPrefix").click(
+            function () {
+                if (this.checked)//$(this).prop('checked', true)
+                {
+                    $(".pin-prefix-dropdown").attr("disabled", "disabled");
+                    $(".pin-prefix-dropdown").hide();
+
+                    $(".pin-prefix-textBox").removeAttr("disabled");
+                    $(".pin-prefix-textBox").show();
+                }
+                else
+                {
+                    $(".pin-prefix-textBox").attr("disabled", "disabled");
+                    $(".pin-prefix-textBox").hide();
+                    $(".pin-prefix-dropdown").removeAttr("disabled");
+                    $(".pin-prefix-dropdown").show();
+                }
+            });
+    })
+</script>

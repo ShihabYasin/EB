@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "CreateDistributor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/intlTelInput.css" rel="stylesheet" />
+<h3 class="text-center page-header">Distributor</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Create Distributor
+        </span>
+        <div class="bordered-container-inner">
+            @*@using (Html.BeginForm())*@
+            @using (Html.BeginForm("CreateDistributor", "Distributor", FormMethod.Post, new { @class = "form-horizontal", id = "DistributorForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @if (ViewBag.ApiStatus != null && ViewBag.ApiStatus == 30)
+                    {
+                        <div class="alert alert-success">@ViewBag.Message</div>
+                    }
+                    else if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Message</div>
+                    }
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-group">
+                        @Html.Label("User Name", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBox("UserName", null, new { @class = "form-control", @placeholder = "only numeric number or digit.", type = "tel", style = "display:none" })
+                            <input id="phone" type="tel" name="phone" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.Label("Role", new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                            @*@Html.TextBox("Role", null, new { @class = "form-control" })*@
+                            @Html.DropDownList("Role", ViewBag.Distributors as SelectList, "--Please select a Role--", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Active", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBox("IsActive", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-warning" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @Html.ActionLink("Back to List", "Distributors", null, new { @class = "btn btn-primary btn-xs" })
+
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/intlTelInput.js"></script>
+<script>
+    $("#phone").intlTelInput({
+        defaultCountry: "auto",
+        geoIpLookup: function (callback) {
+            $.get('http://ipinfo.io', function () { }, "jsonp").always(function (resp) {
+                var countryCode = (resp && resp.country) ? resp.country : "";
+                callback(countryCode);
+            });
+        },
+        utilsScript: "../Scripts/utils.js" // just for formatting/placeholders etc
+    });
+
+    // update the hidden input on submit
+    $("form").validate({
+        submitHandler: function (form) {
+            var phoneNumber = $("#phone").intlTelInput("getNumber");
+            intRegex = /[0-9]$/;
+            if (phoneNumber.substring(0, 3) == "880") {
+                if (phoneNumber.length != 13 || !intRegex.test(phoneNumber)) {
+                    alert("Invalid Phone Number");
+                    return false;
+                }
+            }
+
+            $("#UserName").val(phoneNumber);
+            $("#DistributorForm").submit();
+        }
+    });
+</script>
+
+
+

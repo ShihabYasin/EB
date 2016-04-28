@@ -1,0 +1,7 @@
+sms formats
+1. Recharge 	- Rec<space><11_digit_Pin>
+2. Top Up 	- Top<space><amount><space><phone_number>
+		- Top<space><amount><space><phone_number><space><po(if postpaid)>
+		- Top<space><amount><space><phone_number><space><pin>
+		- Top<space><amount><space><phone_number><space><po(if postpaid)><space><pin>
+		- <11_digit_Pin><space><phone_number>

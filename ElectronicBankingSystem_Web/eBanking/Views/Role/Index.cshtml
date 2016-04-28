@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+
+@model IEnumerable<IdentityRole>
+@{
+    ViewBag.Title = "Index";
+ 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    int row = 0;
+}
+
+
+<h3 class="text-center page-header">Role Manager</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Configured User Roles
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table table-striped">
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name</th>
+                    <th>
+                        @Html.ActionLink("Create New Role", "CreateRole", null, new { @class = "btn  btn-success btn-xs" })
+                        @*@Ajax.ActionLink("Create New Role", "CreateRole", "Role", new { ajaxLoad = 1 },
+                                                    new AjaxOptions
+                                                    {
+                                                        HttpMethod = "GET",
+                                                        InsertionMode = InsertionMode.Replace,
+                                                        UpdateTargetId = "mainContentPage"
+                                                        //OnBegin = "show_loading",
+                                                        //OnComplete = "hide_loading"
+                                                    },
+                                                                      new { @class = "btn btn-success btn-xs" }
+                                                )*@
+                    </th>
+                </tr>
+                @if (Model.Count() == 0)
+                {
+                    <tr><td colspan="4" class="text-center">No Role exists.</td></tr>
+                }
+
+                else
+                {
+                    foreach (IdentityRole role in Model)
+                    {
+                        row++;
+                        <tr>
+                            <td>@row</td>
+
+                            <td>@role.Name </td>
+
+                            <td>
+             @Html.ActionLink("Edit", "Edit", "Role", new {id = role.Id, RoleName = role.Name }, new { @class = "btn btn-warning btn-xs" })
+
+                                             
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>

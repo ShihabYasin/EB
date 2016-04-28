@@ -1,0 +1,445 @@
+﻿@*@model IEnumerable<eBanking.Models.Transaction>*@
+@model PagedList.IPagedList<eBanking.Models.TransactionHistory>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Transaction History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int srNO = (Model.PageNumber - 1) *  Model.PageSize;
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<style>
+    .table {
+        margin-bottom: 0 !important;
+    }
+</style>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+
+@* start point of the changed for topUp message when mouse pointer over the image*@
+<head>
+    <title></title>
+    <style type="text/css">
+        .info {
+            background-color: GrayText;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            position: absolute;
+            display: block;
+            color: White;
+            font-family: Arial;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        $(function () {
+            var info = $("#info");
+            if (info.length == 0) {
+                info = $("<span />").addClass("info");
+                $("body").append(info);
+            }
+            info.hide();
+            $(".hover_text").bind("mouseenter", function () {
+                var p = GetScreenCordinates(this);
+                info.html(this.alt);
+                info.show();
+                info.css("400px", $(this).width());
+                info.css({ "left": p.x, "top": p.y + this.offsetHeight - info[0].offsetHeight });
+            });
+            $(".hover_text").bind("mouseleave", function () {
+                info.hide();
+            });
+        });
+        function GetScreenCordinates(obj) {
+            var p = {};
+            p.x = obj.offsetLeft;
+            p.y = obj.offsetTop;
+            while (obj.offsetParent) {
+                p.x = p.x + obj.offsetParent.offsetLeft;
+                p.y = p.y + obj.offsetParent.offsetTop;
+                if (obj == document.getElementsByTagName("body")[0]) {
+                    break;
+                }
+                else {
+                    obj = obj.offsetParent;
+                }
+            }
+            return p;
+        }
+    </script>
+</body>
+@* end point of the changed for topUp message when mouse pointer over the image*@
+
+    <div class="container" id="ManageTransferPage">
+        <h3 class="text-center page-header">Transaction History</h3>
+
+        @using (Html.BeginForm("TransactionHistory", "Transaction"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="bordered-container">
+                <span class=" border-title">
+                    Search
+                </span>
+                <div class="bordered-container-inner">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="f1" class="control-label col-md-1 no-padding-right">User</label>
+                            <div class="col-md-2">
+                                @Html.TextBox("User", "", new { @class = "form-control", value = ViewBag.User })
+                            </div>
+                            <label for="f1" class="control-label col-md-1 no-padding-right">Recipient</label>
+                            <div class="col-md-2">
+                                @Html.TextBox("Recipient", "", new { @class = "form-control", value = ViewBag.Recipient })
+                            </div>
+                            <label for="FromDate" class="control-label col-md-1 no-padding-right">From Date</label>
+                            <div class="col-md-2">
+                                @Html.TextBox("FromDate", "", new { @class = "form-control pickDate", value = ViewBag.FromDate })
+                            </div>
+                            <label for="ToDate" class="control-label col-md-1 no-padding-right">To Date</label>
+                            <div class="col-md-2">
+                                @Html.TextBox("ToDate", "", new { @class = "form-control pickDate", value = ViewBag.ToDate })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Destination" class="control-label col-md-1 no-padding-right">Destination</label>
+                            <div class="col-md-2">
+                                @Html.DropDownList("Destination", new SelectList(ViewBag.DestinationList, "Id", "DestinationName"), "Select a Destination", new { @class = "form-control" })
+                            </div>
+
+                            <label for="Status" class="control-label col-md-1 no-padding-right">Status</label>
+                            <div class="col-md-2">
+                                @Html.DropDownList("Status", new SelectList(ViewBag.StatusList, "Id", "Name"), "Select a Status", new { @class = "form-control" })
+                            </div>
+                            <label for="Service" class="control-label col-md-1 no-padding-right">Services</label>
+                            <div class="col-md-2">
+                                @Html.DropDownList("Service", ViewBag.Service2 as SelectList, "Select a Service", new { @class = "form-control" })
+                            </div>
+                            <label for="Service" class="control-label col-md-1 no-padding-right">Pin Code</label>
+                            <div class="col-md-2">
+                                @Html.TextBox("PinCode", "", new { @class = "form-control", value = ViewBag.PinCode })
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="ClientList" class="control-label col-md-1 no-padding-right">Client</label>
+                            <div class="col-md-2">
+                                @Html.DropDownList("ClientId", ViewBag.ClientList as SelectList, "Select Client ID", new { @class = "form-control" })
+                            </div>
+                            <label class="control-label col-md-1 no-padding-right">Items Per Page</label>
+                            <div class="col-md-2">
+                                @Html.DropDownList("itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control" })
+                            </div>
+
+                            <label class="control-label col-md-1 no-padding-right">&nbsp;</label>
+                            <div class="col-md-2">
+                                <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="bordered-container">
+            <table class="table small-font">
+                <tr>
+                    <th>
+                        Sr No.
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.TransactionDate)*@
+                        Transaction Date
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.UpdateDate)*@
+                        Updated On
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.OperationNumber)*@
+                        Operation Number
+                    </th>
+                    <th>
+                        Pin Code
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.FromCurrencyId)*@
+                        Transaction Requested From
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.PinId)
+                            Pin Number
+                        </th>*@
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.InsertedAmount)*@
+                        Inserted Amount (Local Currency)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.AmountIN)*@
+                        Amount Received (USD)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.AmountOut)*@
+                        Amount Send (USD)
+                    </th>
+                    <th>
+                        User ID
+                        @*@Html.DisplayNameFor(model => model.UserId)*@
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.ToUser)*@
+                        Recipient
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.ConversationRate)
+                            Convertion Rate
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.RatePlanId)
+                        </th>*@
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.ServiceName)*@
+                        Service
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.StatusName)*@
+                        Status
+                    </th>
+                    <th>
+                        Client Name
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.FromUser)
+
+                        </th>*@
+
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Remarks)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReferenceId)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.TimeOut)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsTimeOut)
+                        </th>
+                        <th></th>*@
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    srNO++;
+                    <tr>
+                        <td>
+                            @srNO
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdateDate)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OperationNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PinCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountryName)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.PinId)
+                            </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InsertedAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountIN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountOut)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.ConversationRate)
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.RatePlanId)
+                            </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToUser)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StatusName)
+                           @* <img src="~/Images/remark.jpg" class="hover_text" style="width:30%; height:auto" alt="@Html.DisplayFor(modelItem => item.Remarks)" />*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ClientName)
+                        </td>
+
+                        <td class="remarks">
+                            @if (!string.IsNullOrEmpty(item.Remarks))
+                            {
+                                <a href="#" style="font-size: 16px;">
+                                    <span class="glyphicon glyphicon-info-sign" onmouseover=""></span>
+                                    <span class="remarks-info">@item.Remarks</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <span>&nbsp;</span>
+                            }
+                        </td>
+                        
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.FromUser)
+                            </td>*@
+
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.Remarks)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceId)
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.TimeOut)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsTimeOut)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                            </td>*@
+                    </tr>
+                }
+
+            </table>
+            <table class="table center-table borderless">
+                <tr>
+                    <th class="text-center">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        <br />
+                        @Html.PagedListPager(Model, page => Url.Action("TransactionHistory", new { User = ViewBag.User, Recipient = ViewBag.Recipient, Status = ViewBag.Status, Service = ViewBag._SelectedServiceId, FromDate = ViewBag.FromDate, Destination = ViewBag.Destination, ToDate = ViewBag.ToDate, CustomerSupport = ViewBag.CustomerSupport, Message = ViewBag.Message, PinCode = ViewBag._SelectPinCode, page, itemsPerPage = ViewBag.ItemsPerPage }))
+                    </th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <style>
+        .states {
+            color: #00ff21;
+            background-color: #808080;
+        }
+        .Service {
+            color: #00ff21;
+            background-color: #808080;
+        }
+        .remarks-info {
+            display: none;
+        }
+        .remarks .remarks-info {
+            float: left;
+            /*padding-right: 5px;*/
+            position: absolute;
+            border-radius: 5px;
+            padding: 5px;
+            border: 1px solid black;
+            background-color: #47C0FF;
+            max-width: 300px;
+            color: #ffffff;
+        }
+    </style>
+
+    <script>
+        $('option').each(function () {
+            var name = $(this).attr("value");
+            if (name == "-1") {
+                $(this).attr("disabled", "true");
+                $(this).addClass("states");
+            }
+        });
+
+        $('option').each(function () {
+            var name = $(this).attr("value");
+            if (name == "-1") {
+                $(this).attr("disabled", "true");
+                $(this).addClass("states");
+            }
+        });
+
+        $('')
+
+        $(document).ready(function () {
+            $("#wrapper").addClass("toggled");
+
+            /* activate to enable custom coloring of the table rows based on status*/
+            //    $(".transaction-status select option:selected").each(function () {
+            //        $(this).prevAll().remove();
+            //        var selectedStatus = $(this).text();
+            //        console.log("Fired");
+            //        if (selectedStatus == "Complete")
+            //        {
+            //            console.log("bg changed - complete");
+            //            console.log($(this).prevUntil("tr").html());
+            //            //$(this).prevUntil("tr").css("background-color", "rgba(132, 255, 132, 0.62)");
+            //            $(this).closest("tr").css("background-color", "rgba(132, 255, 132, 0.62)");
+            //            //$(this).closest("tr").prev().css("background-color", "rgba(132, 255, 132, 0.62)");
+            //        }
+            //        else if (selectedStatus == "Pending") {
+            //            $(this).closest("tr").css("background-color", "rgba(255, 252, 0, 0.388235)");
+            //        }
+            //        else if (selectedStatus == "Canceled" || selectedStatus == "Failed") {
+            //            console.log("bg changed - Canceled");
+            //            $(this).closest("tr").css("background-color", "rgba(255, 0, 0, 0.39)");
+            //        } else {
+            //            $(this).closest("tr").css("background-color", "rgba(0, 90, 255, 0.388235)");
+            //        }
+
+            //        if (selectedStatus == "Complete" || selectedStatus == "Canceled" || selectedStatus == "Failed")
+            //        {
+            //            //$(this).siblings().attr("disabled", true);
+            //            $(this).siblings().remove();
+            //        }
+            //     });
+
+
+        });
+
+
+        /* activate to enable the datepicker pop up*/
+        $(" .pickDate").datepicker({ dateFormat: 'dd-M-yy' });
+
+        /* activate to enable text input expantion*/
+        
+        $('.remarks').hover(function() {
+            $('.remarks-info', this).slideToggle(100, 'linear').display(100, 'linear');
+        });
+    </script>
+    @{
+        if (ViewBag.QueryStatus != null)
+        {
+            <script>
+                $(document).ready(function () {
+                    $("#Status").val(@ViewBag.QueryStatus);
+                })
+            </script>
+        }
+    }

@@ -1,0 +1,292 @@
+﻿
+@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.VendorTransactionMV>
+@{
+    ViewBag.Title = "Vendor Transaction";
+    //ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int srNO = (Model.PageNumber - 1) * Model.PageSize;
+    int i = 0;
+    var VendorGroup = ViewBag.VendorGroup;
+}
+
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<style>
+    .table {
+        margin-bottom: 0 !important;
+    }
+</style>
+
+<head>
+<title></title>
+<style type="text/css">
+    .info {
+        background-color: GrayText;
+        filter: alpha(opacity=60);
+        opacity: 0.6;
+        position: absolute;
+        display: block;
+        color: White;
+        font-family: Arial;
+        font-size: 10pt;
+    }
+</style>
+</head>
+
+
+<h3 class="text-center page-header">Vendor Transaction</h3>
+<div class="row">
+    @using (Html.BeginForm("Index", "VendorTransactions"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-6">
+            <div class="bordered-container">
+                <span class=" border-title">
+                    Search
+                </span>
+
+                <div class="bordered-container-inner">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="FromDate" class="control-label col-md-2 ">From Date</label>
+                            <div class="col-md-4">
+                                @Html.TextBox("FromDate", "", new { @class = "form-control pickDate", value = ViewBag.FromDate })
+                            </div>
+                            <label for="ToDate" class="control-label col-md-2 no-padding-right">To Date</label>
+                            <div class="col-md-4">
+                                @Html.TextBox("ToDate", "", new { @class = "form-control pickDate", value = ViewBag.ToDate })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ServiceId" class="control-label col-md-2 no-padding-right">Service</label>
+                            <div class="col-md-7">
+                                @*@Html.DropDownList("ServiceId", ViewBag.ServiceList as SelectList, "Select Service", new { @class = "form-control" })*@
+                                @Html.DropDownList("ServiceId", ViewBag.Service2 as SelectList, "  ---Select a Service---", new { @class = "form-control" })
+                            </div>
+                            </div>
+                        <div class="form-group">
+                            <label for="VendorId" class="control-label col-md-2 no-padding-right">Vendor</label>
+                            <div class="col-md-7">
+                                @Html.DropDownList("VendorId", ViewBag.VendorList as SelectList, "  ---Select a Vendor---", new { @class = "form-control" })
+                            </div>
+
+                            @*<label for="TransactionId" class="control-label col-md-1 no-padding-right">Operation Number</label>
+                                <div class="col-md-2">
+                                    @Html.TextBox("TransactionId", "", new { @class = "form-control", value = ViewBag.TransactionId })
+                                </div>
+                                <label for="UsdCurrencyId" class="control-label col-md-1 no-padding-right">Country</label>
+                                <div class="col-md-2">
+                                    @Html.DropDownList("Country", ViewBag.CountryList as SelectList, "Select Country", new { @class = "form-control" })
+                                </div>
+                                <label for="CreatedBy" class="control-label col-md-1 no-padding-right">Created By</label>
+                                <div class="col-md-2">
+                                    @Html.TextBox("CreatedBy", "", new { @class = "form-control", value = ViewBag.CreatedBy })
+                                </div>
+
+                                <label class="control-label col-md-1 no-padding-right">Items Per Page</label>
+                                <div class="col-md-2">
+                                    @Html.DropDownList("ItemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control" })
+                                </div>*@
+
+                            @*<label class="control-label col-md-1 no-padding-right">&nbsp;</label>*@
+                            </div>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-6 col-sm-4">
+        <div class=" bordered-container">
+            <span class="border-title">Search Summary</span>
+            <div class="bordered-container-inner">
+                    
+                    <table class="table small-font">
+                        <tr>
+                            <th>
+                                Serial
+                            </th>
+                            <th>
+                                Vendor Name
+                            </th>
+                            @*<th>
+                                Service Name
+                            </th>*@
+                            <th>
+                                Balance In (USD)
+                            </th>
+                            <th>
+                                Balance Out (USD)
+                            </th>
+                        </tr>
+                        
+                        @foreach (var items in Model)
+                        {
+                            foreach(var value in items.VendorGroup)
+                            {
+                                i++;
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => value.VendorName)
+                                    @*</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem=>value.ServiceName)
+                                    </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => value.BalanceIn)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => value.BalanceOut)
+                                    </td>
+                                </tr>
+                            }
+                            break;                          
+                        }
+                        <tr>
+                            @*<th>
+                                <label class="control-label col-md-1 no-padding-right">&nbsp;</label>
+                            </th>*@
+                            <th>
+                                <label class="control-label col-md-1 no-padding-right">&nbsp;</label>
+                            </th>
+                            <th>
+                                Total Balance   = 
+                            </th>
+                            <th>
+                                @Html.ViewBag.TotalBalanceIn
+                            </th>
+                            <th>
+                                @Html.ViewBag.TotalBalanceOut
+                            </th>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+@*@<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<div class="row">
+    <div class="bordered-container" id="ManageTransferPage">
+        <span class="border-title">Search Rresult</span>
+        <table class="table small-font">
+
+            <tr>
+                <th>
+                    Serial No.
+                </th>
+                <th>
+                    Date                   
+                </th>
+                <th>
+                    Vendor Name 
+                </th>
+                <th>
+                    Service Name
+                </th>
+                <th>                    
+                    Operation Number
+                </th>
+                @*<th>
+                        Vendor Tarrif Id
+                    </th>*@
+                <th>
+                    Amount In (BDT)
+                </th>
+                <th>
+                    Amount Out (BDT)
+                </th>
+                <th>
+                    Amount In (USD)
+                </th>
+                @*<th>
+                        Conversion Rate USD
+                    </th>*@
+                <th>
+                    Amount Out USD 
+                </th>
+                <th>
+                    Country Name
+                </th>
+                @*<th>
+                    Created By
+                </th>*@
+                @*<th>
+                        Vendor Balance
+                    </th>*@
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionId)
+                        </td>
+                        @*<td>*@
+                        @* @Html.DisplayFor(modelItem => item.VendorTarrifId)*@
+                        @*</td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountInLocal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountOutLocal)
+                        </td>                        
+                        @*<td>*@
+                        @*@Html.DisplayFor(modelItem => item.ConversionRateUSD)*@
+                        @*</td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountInUSD)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountOutUSD)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountryName)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.VendorBalance)
+                            </td>*@
+                    </tr>
+            }
+
+        </table>
+        <table class="table center-table borderless">
+            <tr>
+                <th class="text-center">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    <br />
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { ServiceId = ViewBag._SelectedServiceId, VendorId = ViewBag._SelectedVendorId, CountryId = ViewBag._SelectedCountryId, CreatedBy = ViewBag.CreatedBy, FromDate = ViewBag.FromDate, TransactionId = ViewBag._SelectedTransactionId, ToDate = ViewBag.ToDate, page, itemsPerPage = ViewBag.ItemsPerPage }))
+                </th>
+            </tr>
+        </table>
+
+    </div>
+</div>
+<script>
+    $(" .pickDate").datepicker({ dateFormat: 'dd-M-yy' });
+</script>

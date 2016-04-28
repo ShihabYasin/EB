@@ -1,0 +1,99 @@
+﻿@model eBanking.Models.VendorTransaction
+
+@{
+    ViewBag.Title = "VendorRecharge";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-center page-header">Vendor Recharge</h3>
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Rechage Vendor
+        </span>
+        <div class="bordered-container-inner">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                   
+                    @Html.ValidationSummary(true)
+
+                    <br />
+                    <div class="form-group">
+                        @Html.Label("Vendor", htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.VendorId, (SelectList)ViewBag.VendorList, "--Select Vendor--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.VendorId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Received Amount", htmlAttributes: new { @class = "control-label col-md-3" })
+                        @*@Html.LabelFor(model => model.AmountInLocal, htmlAttributes: new { @class = "control-label col-md-3" })*@
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.AmountInLocal, new { id = "local", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AmountInLocal)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Received Currency", htmlAttributes: new { @class = "control-label col-md-3" })
+                        @*@Html.LabelFor(model => model.UsedCurrencyId, new { @class = "control-label col-md-3" })*@
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(mode => mode.UsedCurrencyId, (SelectList)ViewBag.CurrencyList, "--Select Currency--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UsedCurrencyId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Convertion Rate", htmlAttributes: new { @class = "control-label col-md-3" })
+                        @*@Html.LabelFor(model => model.ConversionRateUSD, htmlAttributes: new { @class = "control-label col-md-3" })*@
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.ConversionRateUSD, new { id = "cRate", @class = "form-control", placeholder = "Amount of Used Currency per USD" })
+                            @Html.ValidationMessageFor(model => model.ConversionRateUSD)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AmountInUSD, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.AmountInUSD, new { id = "usd", @readonly = "readonly", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AmountInUSD)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @*@Html.Label("", htmlAttributes: new { @class = "control-label col-md-3" })*@
+                        <div class="col-md-offset-3 col-md-8">
+                            <input type="submit" value="Recharge" class="btn btn-warning" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @*@<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
+            </div>
+        </div>
+    </div>
+<script>
+
+    $(document).ready(function () {
+        var usd = $("#usd").val("0.00");
+        function updatePrice() {
+            var local = parseFloat($("#local").val());
+            var rate = parseFloat($("#cRate").val());       
+            usd = local / rate;
+            if (!isNaN(rate) && !isNaN(local))
+                $("#usd").val(usd);
+            else
+                $("#usd").val(0.00);
+        }
+  
+            $(document).on("change, keyup", "#local,#cRate", updatePrice);
+
+    });
+
+</script>

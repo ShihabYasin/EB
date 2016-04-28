@@ -1,0 +1,101 @@
+﻿@model IEnumerable<eBanking.Models.AssignedDCRPViewModel>
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int row = 0;
+}
+<h3 class="text-center page-header">Distributor</h3>
+<script src="~/Scripts/jquery.jstepper.js"></script>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Rateplans Assigned to - @ViewBag.DistributorName
+        </span>
+        <div class="bordered-container-inner">
+            @if ( !string.IsNullOrEmpty((string)ViewBag.Message))
+            {
+            <div class="alert alert-success">@ViewBag.Message</div>
+            }
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                        @*<button type="submit" value="Update" class="btn btn-success btn-success-extended pull-right">Add New</button>*@
+                    @Html.ActionLink("Add New", "AssignRatePlanToDistributor", new { DistributorId = ViewBag.DistributorId }, new { @class = "btn btn-success btn-success-extended pull-right" })
+
+
+                        @*<div class="col-md-10">
+                            @*<input type="submit" value="Update" class="btn btn-success" />*@  @*btn btn-default
+                            </div>*@
+                    </div>
+
+                    <div class="form-horizontal">
+
+                        <div class="form-group">
+                            @Html.ValidationSummary(true)
+                        </div>
+
+                    </div>
+
+                    <table class="table small-font table-striped no-margin">
+
+                        <tr>
+                            <th class="small-td text-center">
+                                Serial
+                            </th>
+                            <th class="small-td text-center">
+                                Rate Plan ID
+                            </th>
+                            <th class="small-td text-center">
+                                Service ID
+                            </th>
+                            <th class="small-td text-center">
+                                Service
+                            </th>
+                            <th class="small-td text-center">
+                                Commission
+                            </th>
+                            <th class="small-td text-center">
+                                Service Charge
+                            </th>
+                            @*<th class="small-td text-center">
+                                Distributor
+                            </th>*@
+                            
+                        </tr>
+
+                        @if (Model.Count() == 0)
+                        {
+                            <tr><td colspan="3" class="text-center">No User Accounts</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                row++;
+                                  
+                                    
+                                <tr>
+                                    <td class="small-td text-center">
+                                        @row
+                                    </td>
+                                    <td class="small-td text-center">@item.RatePlanId</td>
+                                    <td class="small-td text-center">@item.ServiceId</td>
+                                    <td class="small-td text-center">@item.ServiceName</td>
+                                    <td class="small-td text-center">@item.Commission @(item.IsPercentage == true ? " %" : " USD")</td>
+                                    <td class="small-td text-center">@item.ServiceCharge USD</td>
+                                    @*<td class="small-td text-center">@item.DistributorId</td>*@
+                                </tr>
+                            }
+                        }
+                    </table>
+            }
+        </div>
+
+        @Html.ActionLink("Back", "Distributors", null, new { @class = "btn btn-primary btn-xs" })
+
+    </div>
+</div>

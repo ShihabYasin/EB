@@ -1,0 +1,111 @@
+﻿@model eBanking.Models.RatePlanViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Rate Plan</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Create new Rate Plan
+        </span>
+        <div class="bordered-container-inner">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServiceName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ServiceName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.FromCurrencyName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FromCurrencyName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ToCurrencyName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ToCurrencyName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ConvertionRate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ConvertionRate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServiceCharge)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ServiceCharge)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServiceChargeIsPercentage)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ServiceChargeIsPercentage)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedBy)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IsActive)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.MRP)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MRP)
+                </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Cost)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.MRPisPercentage)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MRPisPercentage)
+                </dd>
+
+            </dl>
+        </div>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning btn-xs" })*@
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+    </div>
+</div>

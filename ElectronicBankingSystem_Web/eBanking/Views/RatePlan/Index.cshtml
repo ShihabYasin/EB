@@ -1,0 +1,128 @@
+﻿@model IEnumerable<eBanking.Models.RatePlanViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i=0;
+    string balance = null;
+}
+<h3 class="text-center page-header">Rate Plan</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Index
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table">
+                <tr>
+                    <th>
+                        Sr No
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FromCurrencyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ToCurrencyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ConvertionRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceCharge)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceChargeIsPercentage)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OtherCharge)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MRP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MRPisPercentage)
+                    </th>
+                    <th>@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs  btn-success btn-create" })</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    i++;
+                    balance =Convert.ToString(item.ConvertionRate);
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FromCurrencyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToCurrencyName)
+                        </td>
+                        <td class="col-md-8">
+                            @*@Html.DisplayFor(modelItem => item.ConvertionRate)*@
+                            @balance
+                        </td>
+                        <td class="col-md-10">
+                            @Html.DisplayFor(modelItem => item.ServiceCharge)
+                        </td>
+                        <td class="col-md-10">
+                            @Html.DisplayFor(modelItem => item.ServiceChargeIsPercentage)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OtherCharge)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MRP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MRPisPercentage)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })*@
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id },new { @class = "btn btn-primary btn-xs" })*@
+                        </td>
+                    </tr>
+                }                
+
+            </table>
+        </div>
+        
+    </div>
+   
+</div>
+<script>
+    $(document).ready(function () {
+        $("#wrapper").addClass("toggled");
+    });
+</script>
+
+
+
+

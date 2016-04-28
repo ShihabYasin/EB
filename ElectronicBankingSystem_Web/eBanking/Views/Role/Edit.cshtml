@@ -1,0 +1,200 @@
+﻿@model List<eBanking.Models.RoleDetail>
+
+@{
+    ViewBag.Title = "role Details";
+    
+        Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<h3 class="text-center page-header">Role Manager</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Edit User Role
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm("Edit", "Role", FormMethod.Post))
+                    {
+                @Html.AntiForgeryToken()
+
+
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        @Html.ValidationSummary(true)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-2">
+                            Role Name
+                        </div>
+
+                        <div class="col-md-10">
+                            <input name="RoleName" type="text" class="form-control" value="@ViewBag.RoleName" readonly="readonly" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-2">
+                            Change Role Name
+                        </div>
+
+                        <div class="col-md-10">
+                            <input name="ChangeRoleName" type="text" class="form-control" />
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-success" />  @*btn btn-default*@
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr />
+
+                <table class="table table-striped no-margin">
+
+                    <tr>
+                        <th>
+                            Sr No.
+                        </th>
+                        @*<th>
+                                Id
+                            </th>
+                            <th>
+                                RoleId
+                            </th>*@
+                        <th>
+                            ControllerName
+                        </th>
+                        <th>
+                            ActionName
+                        </th>
+                        <th>
+
+                            @Html.CheckBox("eId", new { type = "checkbox", onchange = "checkAll(this)" }) @*onchange = "checkAll(this)"*@
+                            Select All
+
+                        </th>
+
+                    </tr>
+
+                    @if (Model.Count == 0)
+                            {
+                        <tr><td colspan="3" class="text-center">No User Accounts</td></tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(i + 1)
+                                        </td>
+                                        @*<td>*@
+                                        @Html.TextBox("Model[" + @i + "].Id", Model[i].Id, new { @readonly = "readonly", style = "border-width:0px;border:none;background-color:transparent;display:none;" })
+                                        @*</td>
+                                            <td>*@
+                                        @Html.TextBox("Model[" + @i + "].RoleId", Model[i].RoleId, new { @readonly = "readonly", style = "border-width:0px;border:none;background-color:transparent;display:none;" })
+                                        @*</td>*@
+                                        <td>
+                                            @Html.TextBox("Model[" + @i + "].ControllerName", Model[i].ControllerName, new { @readonly = "readonly", style = "border-width:0px;border:none;background-color:transparent" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("Model[" + @i + "].ActionName", Model[i].ActionName, new { @readonly = "readonly", style = "border-width:0px;border:none;background-color:transparent" })
+                                        </td>
+                                        <td>
+
+                                            @Html.CheckBox("Model[" + @i + "].IsAccessible", Model[i].IsAccessible, new { type = "checkbox", @class = "checkbox1", onchange = "checkChecked(this)" })
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            }
+                </table>
+                
+        }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //$(document).ready(function () {
+    //    $('#selecctall').click(function (event) {  //on click
+    //        if (this.checked) { // check select status
+    //            $('.checkbox1').each(function () { //loop through each checkbox
+    //                this.checked = true;  //select all checkboxes with class "checkbox1"
+    //            });
+    //        } else {
+    //            $('.checkbox1').each(function () { //loop through each checkbox
+    //                this.checked = false; //deselect all checkboxes with class "checkbox1"
+    //            });
+    //        }
+    //    });
+
+    //});
+
+    function checkAll(ele) {
+        var checkboxes = document.getElementsByClassName('checkbox1');
+        //getElementsByTagName('input');
+        if (ele.checked) {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = true;
+                }
+            }
+        } else {
+            for (var i = 0; i < checkboxes.length; i++) {
+                console.log(i)
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false;
+                }
+            }
+        }
+    }
+
+    function checkChecked(ele) {
+        var uncheck_count = 0;
+        var checkboxes = document.getElementsByClassName('checkbox1');
+        // getElementsByTagName('input');
+
+        if (ele.checked) {
+            //check every chekbox if all check box is checked then to checked in select all
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    if (checkboxes[i].checked == false) {
+                        if (document.getElementById("eId").checked == true)
+                            document.getElementById("eId").checked = false;
+                        uncheck_count = 1;
+                        break;
+                    }
+                    else {
+
+                    }
+                }
+            }
+
+            //all check box is checked
+            if (uncheck_count == 0) {
+                if (document.getElementById("eId").checked == false)
+                    document.getElementById("eId").checked = true;
+            }
+
+
+        }
+            //for uncheck
+        else {
+            if (document.getElementById("eId").checked == true)
+                document.getElementById("eId").checked = false;
+        }
+
+
+    }
+
+</script>

@@ -1,0 +1,108 @@
+﻿@model IEnumerable<eBanking.Models.Transaction>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Sr No
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FromCurrencyId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PinId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InsertedAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountIN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountOut)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ConversationRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RatePlanId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ToUser)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    i++;
+    <tr>
+        <td>
+            @i
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromCurrencyId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PinId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InsertedAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountIN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountOut)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ConversationRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RatePlanId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToUser)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

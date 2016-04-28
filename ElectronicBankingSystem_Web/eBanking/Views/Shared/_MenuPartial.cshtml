@@ -1,0 +1,66 @@
+
+@using Microsoft.AspNet.Identity;
+
+
+
+
+<ul class="nav nav-sidebar">
+    @{
+        var test = new eBanking.Controllers.HomeController();
+        if(User.Identity != null)
+        {
+            ViewBag.Menu = test.GenerateMenuFromHome(User.Identity.GetUserName());
+        }
+       
+    }
+    @if (ViewBag.Menu != null)
+    {
+        string groupName = null;
+        string Name, Action, Controller = null;
+
+        foreach (var item in ViewBag.Menu)
+        {
+            
+            Name = item.Name;
+            Action = item.ActionName;
+            Controller = item.ControllerName;
+            Controller = Controller.Replace("Controller", "");
+            
+                if (item.GroupName != groupName)
+                {
+                    if (groupName != null)
+                    {
+                        @Html.Raw("</ul></li>")  
+                    }
+                        
+                    groupName = item.GroupName;
+                    @Html.Raw("<li><label class='tree-toggler nav-header'>")
+                    @groupName
+                    @Html.Raw("</label><ul class='nav nav-list tree'><li>")
+                        @Html.ActionLink(Name, Action, Controller)
+                    @Html.Raw("</li>")  
+                }
+                else
+                {
+                    @Html.Raw("<li>")  
+                        @Html.ActionLink(Name, Action, Controller)
+                    @Html.Raw("</li>")  
+                }
+            }
+        }
+    
+
+    <li></li>
+    <li></li>
+</ul>
+
+
+<script>
+    $(document).ready(function () {
+        $('label.tree-toggler').click(function () {
+            $(this).parent().children('ul.tree').toggle(300);
+        });
+    });
+</script>
+
+

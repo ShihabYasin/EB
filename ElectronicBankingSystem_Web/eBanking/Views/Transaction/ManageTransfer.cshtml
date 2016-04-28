@@ -1,0 +1,331 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.Transaction>
+
+@{
+    ViewBag.Title = "Manage Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int sequenceNo = (Model.PageNumber - 1) * Model.PageSize;
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<style>
+    .table{
+        margin-bottom:0 !important;
+    }
+</style>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<div class="container" id="ManageTransferPage">
+    <h3 class="text-center page-header">Manage Transfer</h3>
+
+    @using (Html.BeginForm("ManageTransfer", "Transaction", FormMethod.Get))
+    {        
+        @Html.AntiForgeryToken()
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search
+            </span>
+            <div class="bordered-container-inner">
+                <div class="form-inline">
+                    <div class="form-group form-group-restricted">
+                        <label for="f1">Mobile No</label>
+                        @Html.TextBox("UserNumber", "", new { @class = "form-control", value = ViewBag.UserNumber })
+
+                        @*<input class="form-control" name="UserNumber" id="f1" type="text" />*@
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="f2">
+                            Status
+                        </label>
+                        @Html.DropDownList("Status", new SelectList(ViewBag.Status, "Id", "Name"), "Select a Status", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="FromDate">From Date</label>
+                        @Html.TextBox("FromDate", "", new { @class = "form-control pickDate", value = ViewBag.FromDate })
+                     
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label for="ToDate">To Date</label>
+                        @Html.TextBox("ToDate", "", new { @class = "form-control pickDate", value = ViewBag.ToDate })
+                      
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label> Items Per Page</label>
+                        @Html.DropDownList("itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group form-group-restricted">
+                        <label> &nbsp;</label>
+                        <input type="submit" class="form-control btn btn-primary" name="Search" id="Search" value="Search" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    @using (Html.BeginForm("ManageTransfer", "Transaction", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        
+        
+    <div class="bordered-container">
+        <span class=" border-title">
+            Search Results
+        </span>
+        <div class="bordered-container-inner">
+            @*<input type="submit" value="Update" class="btn btn-success btn-xs" />*@  @*btn btn-default*@
+            <button type="submit" value="Update" class="btn btn-success btn-success-extended">Update</button>
+            
+               
+                    @Html.ValidationSummary(true)
+                
+           
+            @if (ViewBag.Result != null && !string.IsNullOrEmpty(ViewBag.Result))
+            { 
+            
+            <div>               
+                    @ViewBag.Result               
+            </div>
+            }
+                
+            <div>
+                <table class="table small-font no-padding table-bordered" id="ReportTable">
+                    <tr>
+                        <th class="small-td text-center">
+                            Sr no
+                        </th>
+                        <th class="small-td text-center">
+                            Select
+                        </th>
+                        <th class="small-td text-center">
+                            Date
+                        </th>
+                        <th class="small-td text-center">
+                            User
+                        </th>
+                        @*<th>
+                    @Html.DisplayNameFor(model => model.TransactionId)
+                </th>*@
+                        <th class="small-td medium-td text-center">
+                            Service Name
+                        </th>
+                        @*<th>
+                    @Html.DisplayNameFor(model => model.FromCurrencyId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PinId)
+                </th>*@
+                        <th class="small-td text-center">
+                            Request Amount
+                        </th>
+
+
+                        <th class="small-td text-center">
+                            Service Charge
+                        </th>
+                        @*<th>
+                    @Html.DisplayNameFor(model => model.AmountIN)
+                </th>*@
+                        <th class="small-td text-center">
+                            Cost (USD)
+                        </th>
+
+                        <th class="text-center">
+                            Recepient User
+                        </th>
+
+                        @*<th>
+                    @Html.DisplayNameFor(model => model.RatePlanId)
+                </th>*@
+
+                        <th class="small-td text-center">
+                            Update Date
+                        </th>
+                        <th class="small-td text-center">
+                            Status
+                        </th>
+
+                       
+
+                        @*<th>
+                            @Html.DisplayNameFor(model => model.FromUser)
+                        </th>*@
+
+               
+                        <th class="small-td text-center">
+                            Reference Number
+                        </th>
+                        <th class="small-td text-center">
+                            Remarks
+                        </th>
+                    </tr>
+
+
+                    @if (Model.Count == 0)
+                    {
+                        <tr><td colspan="3" class="text-center">No Result Found.</td></tr>
+                    }
+
+                    else
+                    {
+
+                        for (int i = 0; i < Model.Count; i++)
+                        {
+
+                            <tr>
+
+                                <td class="small-td  text-center">
+                                   <div class="top-padding-6">@(++sequenceNo)</div>
+
+                                </td>
+                              
+                                
+                                <td class="small-td   text-center">
+                                    @Html.CheckBox("Model[" + @i + "].IsCheck", Model[i].IsCheck, new { @readonly = "readonly", @class = "textbox-transparent", @style = "margin-top: 9px !important;" })
+                                </td>
+
+                                
+                                <td class="date-time">
+                                    @Html.TextBox("dateTime", Model[i].TransactionDate.Value.Date.ToString("dd/MM/yy"), new { @readonly = "readonly", @class = "medium-td textbox-transparent" })
+                                    
+                                </td>
+                                <td class="small-td">
+                                    @Html.TextBox("Model[" + @i + "].UserId", Model[i].UserId, new { @readonly = "readonly", @class = "medium-td textbox-transparent" })
+                                </td>
+                                
+                                <td class="small-td medium-td">
+
+                                    @Html.TextBox("Model[" + @i + "].ServiceName", Model[i].ServiceName, new { @readonly = "readonly", @class = "textbox-transparent" })
+
+                                </td>
+
+                                <td class="small-td">
+                                    @Html.TextBox("Model[" + @i + "].InsertedAmount", Model[i].InsertedAmount, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                </td>
+
+                                <td class="small-td">
+                                    @Html.TextBox("Model[" + @i + "].ConversationRate", Model[i].ConversationRate, new { @readonly = "readonly", @class = "textbox-transparent" })
+
+                                </td>
+                                                                
+                                <td class="small-td">
+                                    @Html.TextBox("Model[" + @i + "].AmountOut", Model[i].AmountOut, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                </td>
+
+                                <td>
+                                    @Html.TextBox("Model[" + @i + "].ToUser", Model[i].ToUser, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                </td>
+
+
+                                <td class="date-time-long">
+                                    @Html.TextBox("Model[" + @i + "].UpdateDate", Model[i].UpdateDate, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                </td>
+
+                                <td class="small-td transaction-status">
+                                    @if (Model[i].IsTimeOut == true)
+                                    {
+                                        @Html.DropDownList("Model[" + @i + "].Status", new SelectList(ViewBag.Status, "Id", "Name", Model[i].Status), new { @class = "small-select form-control full-width" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox("Model[" + @i + "].Status","Unconfirmed", new { @readonly = "readonly", @class = "textbox-transparent" })
+                                        @*@Html.TextBox("Model[" + @i + "].Status", Model[i].Status, new { @readonly = "readonly", @class = "textbox-transparent" })*@
+                                    }
+                                    @*@Html.DropDownList("Model[" + @i + "].Status", new SelectList(ViewBag.Status, "Id", "Name", Model [i].Status), new { @class = "small-select form-control full-width" })*@
+                                  
+                                </td>
+
+                               
+
+
+                                <td class="small-td">
+                                    @Html.TextBox("Model[" + @i + "].ReferenceId", Model[i].ReferenceId, new { @class = "form-control full-width" })
+
+                                </td>
+                                <td class="small-td">
+                                    @Html.TextArea("Model[" + @i + "].Remarks", Model[i].Remarks, new { @class = "form-control full-width remarks", style = "height: 34px;" })
+
+                                </td>
+
+
+                                @*<td>
+                            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                        </td>*@
+                            </tr>
+                        }
+                    }
+                </table>
+                <table class="table center-table borderless">
+                    <tr>
+                        <td></td>
+                        <th class="text-center">
+                            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                            <br />
+                            @Html.PagedListPager(Model, page => Url.Action("ManageTransfer", new { UserNumber = ViewBag.UserNumber, Status = ViewBag.SelectedStatus, FromDate = ViewBag.FromDate, ToDate = ViewBag.ToDate, CustomerSupport = ViewBag.CustomerSupport, Message = ViewBag.Message, page, itemsPerPage = ViewBag.ItemsPerPage }))
+                        </th>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    }
+    
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#wrapper").addClass("toggled");
+        $("select option[value='51'], .transaction-status option[value='0']").remove();
+        if ($("#Status").val() != 40) {
+            $(".transaction-status option[value='40']").remove(); //40 == canceled   
+        };
+        
+        $(".transaction-status select option:selected").each(function () {
+            $(this).prevAll().remove();
+            var selectedStatus = $(this).text();
+            //console.log("Fired");
+            if (selectedStatus == "Complete")
+            {
+                //console.log("bg changed - complete");
+                //console.log($(this).prevUntil("tr").html());
+                //$(this).prevUntil("tr").css("background-color", "rgba(132, 255, 132, 0.62)");
+                $(this).closest("tr").css("background-color", "rgba(132, 255, 132, 0.62)");
+                //$(this).closest("tr").prev().css("background-color", "rgba(132, 255, 132, 0.62)");
+            }
+            else if (selectedStatus == "Pending") {
+                $(this).closest("tr").css("background-color", "rgba(255, 252, 0, 0.388235)");
+            }
+            else if (selectedStatus == "Canceled" || selectedStatus == "Failed") {
+                console.log("bg changed - Canceled");
+                $(this).closest("tr").css("background-color", "rgba(255, 0, 0, 0.39)");
+            } else {
+                $(this).closest("tr").css("background-color", "rgba(0, 90, 255, 0.388235)");
+            }
+                
+            if (selectedStatus == "Complete" || selectedStatus == "Canceled" || selectedStatus == "Failed")
+            {
+                //$(this).siblings().attr("disabled", true);
+                $(this).siblings().remove();
+            }
+        });
+    });
+    $(" .pickDate").datepicker();
+    $('.remarks').focus(function () {
+        $(this).css({right: "0px", height: 300, width: 200, position: "absolute", "z-index": 2000 });
+    });
+    $('.remarks').focusout(function () {
+        $(this).css({position:"relative", height: "34px", width:"100%", "z-index":1000, overflow:"hidden"});
+    });
+</script>
+@{
+    if (ViewBag.QueryStatus != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#Status").val(@ViewBag.QueryStatus);
+            })
+        </script>
+    }
+}

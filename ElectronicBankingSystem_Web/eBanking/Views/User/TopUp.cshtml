@@ -1,0 +1,249 @@
+﻿@model eBanking.Models.TopUp
+@{
+    ViewBag.Title = "TopUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Top Up</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Top Up
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.RatePlanId)
+                @Html.HiddenFor(model => model.ServiceId)
+                @Html.HiddenFor(model => model.Value)
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    
+                    @if (ViewBag.TopUpResult != null)
+                    {
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @ViewBag.TopUpResult 
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromCurrencyId, new { @class="control-label col-md-2"})
+                    
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.FromCurrencyId, ViewData["Destination"] as SelectList, "Please select a Country", new { @class = "form-control" })
+                           
+                            @Html.ValidationMessageFor(model => model.FromCurrencyId)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToUser, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.ToUser, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ToUser)
+                        </div>
+                    </div>
+                   
+                    <div class="form-group" id="topUpType">
+                        @Html.LabelFor(model => model.Type, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Type, ViewData["Type"] as SelectList, "Please select a Type", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Type)
+                        </div>
+                    </div>
+                    <div class="form-group" id="inputError" style="display: none; color: red;">
+                        <label class="control-label col-md-3"></label>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="control-label" id="inputError1">
+                                    Invalid Amount
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ValueId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.ValueId, ViewData["Service"] as SelectList, "Please select a Money", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ValueId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AmountInUSD, new { @class = "control-label col-md-2" })
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.AmountInUSD, new { id = "dest", @readonly = "readonly", @class = "form-control back_transparent" })
+                                @Html.ValidationMessageFor(model => model.AmountInUSD)
+                            </div>
+                            <div class="col-md-2">
+                                USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProcessingFee, new { @class = "control-label col-md-2" })
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                @Html.TextBoxFor(model => model.ProcessingFee, new { id = "proFee", @readonly = "readonly", @class = "form-control back_transparent" })
+                                @Html.ValidationMessageFor(model => model.ProcessingFee)
+
+
+                            </div>
+                            <div class="col-md-2">
+                                USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TotalAmount, new { @class = "control-label col-md-2" })
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.TotalAmount, new { id = "total", @readonly = "readonly", @class = "form-control back_transparent" })
+                                @Html.ValidationMessageFor(model => model.TotalAmount)
+                            </div>
+                            <div class="col-md-2">
+                                USD
+                            </div>
+
+                        </div>
+                    </div>
+
+                    @*<div class="form-group proFee" style="display:none">
+                        <label id="proFee" class="control-label col-md-6"></label>
+                    </div>
+                    <div class="form-group" id="input-error" style="display:none">
+                        <label id="input-error-in" class="col-md-6 alert-danger"></label>
+                    </div>*@
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Top Up" class="btn btn-primary" />
+                        </div>
+                    </div>
+                   
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<script>
+    function getObjects(obj, key, val) {
+        var objects = [];
+        for (var i in obj) {
+            if (!obj.hasOwnProperty(i)) continue;
+            if (typeof obj[i] == 'object') {
+                objects = objects.concat(getObjects(obj[i], key, val));
+            } else if (i == key && obj[key] == val) {
+                objects.push(obj);
+            }
+        }
+        return objects;
+    }
+    $(document).ready(function () {
+        function set(value) {
+            return value;
+        }
+        $("#topUpType").css("display", "none");
+        $("#topUpType").prop("disabled", true);
+        $("#ValueId").empty();
+        Data = set(@Html.Raw(Json.Encode(ViewData["Data"])));
+        var Service = Data["Service"];
+        var RatePlan = Data["RatePlan"];
+        
+
+        $("#ValueId option").attr("disabled", "disabled");
+
+        $("#FromCurrencyId").change(function () {
+            $("#ValueId").empty();
+            resetValue();
+            var destinationId = parseInt($("#FromCurrencyId option:selected").val());
+            if (destinationId == 14)
+            {
+                $("#topUpType").prop("disabled", false);
+                $("#topUpType").css("display", "block");
+            } else {
+                $("#topUpType").prop("disabled", true);
+                $("#topUpType").css("display", "none");
+            }
+            var Query = getObjects(Service, "DestinationId", destinationId);
+            Query.forEach(function (value) {
+                $("#ValueId").append('<option value="' + value.Id + '">' + value.Name + '</option>');
+            });
+            changeValue();
+        });
+
+        $("#ValueId").change(function () {
+            changeValue();
+        });
+        function resetValue() {
+            $("#dest").val(0);
+            $("#proFee").val(0);
+            $("#total").val(0);
+        }
+        function changeValue() {
+            if (!$("#ValueId option:selected").val())
+                return;
+            var fromCurrencyId = $("#FromCurrencyId").val();
+            var serviceId = $("#ValueId").val();
+
+            var rpQuery = getObjects(getObjects(RatePlan, "FromCurrencyId", fromCurrencyId), "ServiceId", serviceId);
+            rpQuery = rpQuery[0];
+            var sQuery = getObjects(Service, "Id", serviceId); 
+            var source = sQuery[0].value;
+            $("#Value").val(source);
+            $("#RatePlanId").val(rpQuery.Id);
+            $("#ServiceId").val(rpQuery.ServiceId);
+
+            var ConvertedMoney = 0;
+            var TotalMoney = 0;
+            var ServiceCharge = 0;
+
+            var creditLimit = parseFloat($("#creditLimit").text());
+            var maxValue = creditLimit;
+            var maxValueTemp = maxValue + (maxValue * parseFloat(rpQuery.ServiceCharge) / 100);
+
+            for (; (maxValueTemp - creditLimit) > 0; (maxValue -= 1))
+            { maxValueTemp = maxValue + (maxValue * parseFloat(rpQuery.ServiceCharge) / 100); }
+
+            maxValueTemp -= (maxValueTemp * parseFloat(rpQuery.ServiceCharge) / 100);
+            maxValueTemp *= parseFloat(rpQuery.ConvertionRate);
+
+            ConvertedMoney = source / parseFloat(rpQuery.ConvertionRate);
+            ServiceCharge = parseFloat(ConvertedMoney * (rpQuery.ServiceCharge / 100));
+            TotalMoney = parseFloat(ConvertedMoney + ServiceCharge);
+
+            if (maxValueTemp < 1) {
+                $("#dest").val(0);
+                $("#proFee").val(0);
+                $("#total").val(0);
+                $('input[type="submit"]').attr('disabled', 'disabled');
+                $("#inputError").css("display", "block");
+                $("#inputError1").html("You don't have sufficient balance, please recharge first.");
+            }
+            else if (source > maxValueTemp) {
+
+                resetValue();
+
+                $('input[type="submit"]').attr('disabled', 'disabled');
+                $("#inputError").css("display", "block");
+                $("#inputError1").html("You dont have sufficient balance, please recharge first.");
+            }
+            else {
+                $("#dest").val(ConvertedMoney);
+                $("#proFee").val(ServiceCharge);
+                $("#total").val(TotalMoney);
+
+                $('input[type="submit"]').removeAttr('disabled');
+                $("#inputError").css("display", "none");
+            }
+
+        }
+    });
+</script>

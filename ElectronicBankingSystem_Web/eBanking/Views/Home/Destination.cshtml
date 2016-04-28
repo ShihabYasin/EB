@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Destination";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<h2>Destination</h2>
+
+@Html.DropDownList("Destination", "[Select]")
+
+
+<br />
+
+@Html.DropDownList("Currency", "[Select]")
+
+<div id="contenthere"></div>
+<p class="classloader">Click Here</p>
+
+
+<select id="country">
+    <option value="None">-- Select --</option>
+    <option value="1">China</option>
+    <option value="2">United State</option>
+    <option value="Malaysia">Malaysia</option>
+</select>
+
+<br />
+<br />
+<br />
+
+<input type='button' value='Display Selected' id='isSelect'>
+<input type='button' value='Select China' id='selectChina'>
+<input type='button' value='Select US' id='selectUS'>
+<input type='button' value='Select Malaysia' id='selectMalaysia'>
+<input type='button' value='Disable US' id='disableUS'>
+<input type='button' value='Enable US' id='enableUS'>
+
+@*<script>
+
+$(document).ready(function(){
+    $('.classloader.').click(function(){
+        $('#contenthere').load('abc');
+    });
+})
+
+</script>*@
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#Destination").change(function () {
+
+            var Id = $('#Destination').val();
+            //now change the valu of Currency drop downlist where currency.DestinationId=Id
+            $("#country").val(Id);
+        })
+
+
+        $("#isSelect").click(function () {
+
+            alert($('#country').val());
+
+        });
+
+        $("#selectChina").click(function () {
+
+            $("#country").val("1");
+
+        });
+
+        $("#selectUS").click(function () {
+
+            $("#country").val("2");
+
+        });
+
+        $("#selectMalaysia").click(function () {
+
+            $("#country").val("Malaysia");
+
+        });
+
+        $("#disableUS").click(function () {
+
+            $("#country option[value='United State']").attr("disabled", true);
+
+        });
+
+        $("#enableUS").click(function () {
+
+            $("#country option[value='United State']").attr("disabled", false);
+
+        });
+
+    });
+</script>

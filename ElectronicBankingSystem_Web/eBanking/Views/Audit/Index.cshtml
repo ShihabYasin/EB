@@ -1,0 +1,167 @@
+﻿@*@model IEnumerable<eBanking.Models.AuditViewModel>*@
+@using Microsoft.AspNet.Identity.EntityFramework
+@using PagedList.Mvc;
+@using System.Web.Mvc;
+@model PagedList.IPagedList<eBanking.Models.AuditViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = (Model.PageNumber - 1) * Model.PageSize;
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<style>
+    tr td, tr th {
+        padding: 4px !important;
+    }
+</style>
+<h3 class="text-center page-header">Audit Users</h3>
+
+<div class="bordered-container">
+    <span class=" border-title">
+        Search
+    </span>
+    <div class="bordered-container-inner">
+        @using (Html.BeginForm("Index", "Audit", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="IPAddress" class="control-label col-md-2 no-padding-right">IP Address</label>
+                    <div class="col-md-3">
+                        @Html.TextBox("IPAddress", "", new { @class = "form-control", value = ViewBag.IPAddress })
+                    </div>
+                    <label for="UserName" class="control-label col-md-1 no-padding-right">User Name</label>
+                    <div class="col-md-3">
+                        @Html.TextBox("UserName", "", new { @class = "form-control", value = ViewBag.UserName })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="FromDate" class="control-label col-md-2 no-padding-right">From Date</label>
+                    <div class="col-md-3">
+                        @Html.TextBox("FromDate", "", new { @class = "form-control datefield", value = ViewBag.FromDate })
+                    </div>      
+                    <label for="ToDate" class="control-label col-md-1 no-padding-right">To Date</label>
+                    <div class="col-md-3">
+                        @Html.TextBox("ToDate", "", new { @class = "form-control datefield", value = ViewBag.ToDate })
+                    </div>           
+                    <label class="control-label col-md-1 no-padding-right"> &nbsp;</label>
+                    <div class="col-md-3">
+                        <input type="submit" class="btn btn-primary" name="f5" id="f5" value="Search" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm("Index", "Audit", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+    </div>
+
+    <div class="container">
+    <div class="bordered-container">
+
+
+        @if (ViewBag.UserName != null && !string.IsNullOrEmpty(ViewBag.UserName))
+        {
+            <span class=" border-title">
+                Audit History
+            </span>
+        }
+        else
+        {
+            <span class=" border-title"> All Audits   </span>
+        }
+
+        <div class="bordered-container-inner">
+            <table class="table table-striped no-margin">
+                <tr>
+                    <th>
+                        SL No
+                    </th>
+                    <th>
+                        Audit ID
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        URL Accessed
+                    </th>
+                    <th>
+                        IP Address
+                        @*@Html.DisplayNameFor(model => model.PinCode)*@
+                    </th>
+                    <th>
+                        TimeAccessed
+                        @*@Html.DisplayNameFor(model => model.Value)*@
+                    </th>
+                  
+                </tr>
+   
+           @if (Model.Count() == 0)
+                {
+                   <tr><td colspan="6" class="text-center">No Audit User</td></tr>
+                }
+                else
+                {
+                  foreach (var item in Model)  
+                  {
+                    
+                    i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.AuditID
+                          @* @Html.DisplayFor(modelItem => item.AuditID) *@  
+                        </td>
+                        <td>
+                            @item.UserName
+                            @* @Html.DisplayFor(modelItem => item.SerialNo) *@ 
+                        </td>
+                        <td>
+                            @item.URLAccessed
+                           @* @Html.DisplayFor(modelItem => item.PinCode) *@ 
+                        </td>
+                        <td>
+                            @item.IPAddress
+                            @* @Html.DisplayFor(modelItem => item.Value) *@ 
+                        </td>
+                        <td>
+                            @item.TimeAccessed
+                           @* @Html.DisplayFor(modelItem => item.CurrencyName) *@ 
+                        </td>                        
+                    </tr>
+                }
+           }
+            </table>
+            
+        </div>
+    </div>
+</div>
+}
+<table class="table center-table borderless">
+    <tr>
+        <td></td>
+        <th class="text-center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            <br />
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, UserRole = ViewBag.UserRoleSelected, Name = ViewBag.Name }))
+        </th>
+        <td></td>
+    </tr>
+</table>
+<script>
+    $(function () {
+        $(".datefield").datepicker();
+    });
+    $(document).ready(function () {
+        $("#wrapper").addClass("toggled");
+    });
+</script>

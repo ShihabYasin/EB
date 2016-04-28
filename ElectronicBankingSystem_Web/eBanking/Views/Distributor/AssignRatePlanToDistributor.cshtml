@@ -1,0 +1,64 @@
+﻿@model eBanking.Models.AssignDistributorRateplan
+
+@{
+    ViewBag.Title = "AssignRatePlanToDistributor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/intlTelInput.css" rel="stylesheet" />
+<h3 class="text-center page-header">Distributor</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            AssignRatePlanToDistributor
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-group">
+                        @Html.Label("Distributor", new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.TextBox("Distributor Name", "", new { @class = "form-control", value = @ViewBag.DistributorUserName })*@
+                            @Html.TextBox("DistributorName", (string)ViewBag.DistributorUserName, new { @readonly = "readonly", @class = "textbox-transparent" })
+                            @*@Html.ValidationMessageFor(model => model.DistributorId)*@
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RateplanId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.RateplanId, ViewBag.DCRPSelectList as SelectList, "--Please select a Rate Plan--", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.RateplanId)
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display:none">
+                        @Html.LabelFor(model => model.DistributorId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.DistributorId, new { value = @ViewBag.DistributorId, @readonly = "readonly", @class = "textbox-transparent" })
+                            @Html.ValidationMessageFor(model => model.DistributorId)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Assign" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div>
+                @Html.ActionLink("Back", "AssignedRatePlans", new { DistributorId = ViewBag.DistributorId }, new { @class = "btn btn-primary btn-xs" })
+            </div>
+
+        </div>
+    </div>
+</div>
+

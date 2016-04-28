@@ -1,0 +1,51 @@
+﻿@model eBanking.Models.Destination
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Destination Delete</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Destination</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DestinationName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DestinationName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.IsActive)
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-danger" /> |
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+            </div>
+        }
+    </div>
+</div>

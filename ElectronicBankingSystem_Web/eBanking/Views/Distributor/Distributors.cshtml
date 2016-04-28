@@ -1,0 +1,134 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.DistributorViewModel>
+
+@{
+    ViewBag.Title = "Distributors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = (Model.PageNumber - 1) * Model.PageSize;
+}
+
+<div class="container" id="DistributorsPage">
+    <h3 class="text-center page-header">Distributor</h3>
+
+    @*@using (Html.BeginForm("Index", "Reseller", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="bordered-container">
+                <span class=" border-title">
+                    Search
+                </span>
+                <div class="bordered-container-inner">
+                    <div class="form-inline">
+                        <div class="form-group form-group-restricted">
+                            <label for="f1">Pin Serial No</label>
+                            @Html.TextBox("SerialNo", "", new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group form-group-restricted">
+                            <label for="f1">Batch No</label>
+                            @Html.TextBox("BatchNo", "", new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group form-group-restricted">
+                            <label for="f1">Pin Code</label>
+                            @Html.TextBox("PinCode", "", new { @class = "form-control" })
+                        </div>
+                        <div class="form-group form-group-restricted">
+                            <label for="f2">Status</label>
+
+                            @Html.TextBox("Status", "", new { @class = "form-control" })
+                        </div>
+                        <div class="form-group form-group-restricted">
+                            <label for="FromDate">From Date</label>
+                            @Html.TextBox("FromDate", "", new { @class = "form-control pickDate" })
+
+                        </div>
+                        <div class="form-group form-group-restricted">
+                            <label for="ToDate">To Date</label>
+                            @Html.TextBox("ToDate", "", new { @class = "form-control pickDate" })
+
+                        </div>
+                        <div class="form-group form-group-restricted">
+                            <label> &nbsp;</label>
+                            <input type="submit" class="form-control btn btn-primary" name="f5" id="f5" value="Search" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }*@
+
+
+    @*<div class="container">*@
+    <div class="bordered-container">
+        <span class=" border-title">
+            Index
+        </span>
+        <div class="bordered-container-inner">
+
+            <table class="table table-striped no-margin">
+                <tr>
+                    <th>
+                        Sl No.
+                    </th>
+                    <th>
+                        Distibutor Type
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        Distributor Code
+                    </th>
+                    <th>
+                        Distributor Balance
+                    </th>
+                    <th>
+                        @Html.ActionLink("Create New", "CreateDistributor", null, new { @class = "btn btn-warning btn-xs" })
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DistributorType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DistributorCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DistributorBalance)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Rates", "AssignedRatePlans", new { DistributorId = item.DistributorId }, new { @class = "btn btn-primary btn-xs" })
+                        </td>
+                    </tr>
+
+                }
+
+            </table>
+            <table class="table center-table borderless">
+                <tr>
+                    <td></td>
+                    <th class="text-center">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        <br />
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                    </th>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@*</div>*@

@@ -1,0 +1,82 @@
+﻿@model eBanking.Models.Service
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Service</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class="border-title">
+            Create New Services
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Name, new { @class="form-control"})
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DestinationId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                           
+                            @Html.DropDownListFor(model => model.DestinationId, ViewData["Destination"] as SelectList, "--select a country--", new { @class = "form-control" })
+                     
+                            @Html.ValidationMessageFor(model => model.DestinationId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.value, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                          @Html.TextBoxFor(model => model.value, new { @class = "form-control" })
+                          @Html.ValidationMessageFor(model => model.value)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ParentId, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                         @Html.DropDownListFor(model => model.ParentId, ViewData["Parent"] as SelectList, "--select a service Type--", new { @class = "form-control" })                        
+                            @Html.ValidationMessageFor(model => model.ParentId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                           @Html.CheckBoxFor(model => model.IsActive, new { @class = "col-md-1", @checked = "checked",@onclick="return readOnlyCheckBox()" })
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function readOnlyCheckBox() {
+        return false;
+    }
+
+</script>

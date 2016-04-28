@@ -1,0 +1,101 @@
+﻿@model eBanking.Models.VendorTarrif
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-center page-header">VendorTarrif</h3>
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Create New VendorTarrif
+        </span>
+        <div class="bordered-container-inner">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true)
+                    <br />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VendorId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.VendorId, (SelectList)ViewBag.VendorList, "--Select a Vendor--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.VendorId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsActive)
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.ServiceId, (SelectList)ViewBag.ServiceList, "--Select Service--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConversionRate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.ConversionRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ConversionRate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsPercentage, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsPercentage)
+                            @Html.ValidationMessageFor(model => model.IsPercentage)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Cost, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Cost)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Refference, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Refference, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Refference)
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.CreatedBy, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.CreatedBy, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CreatedBy)
+                        </div>
+                    </div>*@
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div>
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+            </div>
+        </div>
+    </div>
+</div>
+

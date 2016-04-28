@@ -1,0 +1,155 @@
+date: 6/03/2016
+------------------------------------------------------
+insert into links (Id, AId, Name, Parent, Url, IsParent, IsActive, ControllerName, ActionName, SequenceId, GroupName) VALUES
+(31, 1, 'My Users', 0, 'a', 0, 1, 'DistributorController', 'RetailerRegisteredUserIndex', 5, 'Distributor')
+
+-----------------------------------------------------------
+date: 17/02/2016
+------------------------------------------------------
+update rateplans SET
+ServiceChargeIsPercentage = 1
+WHERE ServiceChargeIsPercentage is null
+
+date: 16/02/2016
+------------------------------------------------------
+ALTER TABLE ebankingprolive.rateplans
+ ADD ServiceChargeIsPercentage BIT AFTER ServiceCharge;
+
+-- 13-February-2016
+-- --------------------------
+
+-- Transaction
+-- --------------------------
+ALTER TABLE transactions
+ CHANGE ReturnCost DistributorCommission DECIMAL(18,6);
+
+ UPDATE transactions SET
+  DistributorCommission = 0;
+
+-- Pin
+-- --------------------------
+
+   CREATE TABLE PinHistories (
+   SerialNo INT AUTO_INCREMENT NOT NULL,
+   EntryType INT NOT NULL,
+   PinSerialFrom INT NOT NULL,
+   PinSerialTo INT NOT NULL,
+   AssignedBy VARCHAR(512),
+   AssignedTo VARCHAR(512),
+   AssignedOn DATETIME,
+   DTId INT,
+  PRIMARY KEY (SerialNo)
+) ENGINE = InnoDB ROW_FORMAT = DEFAULT;
+
+ALTER TABLE pins
+ ADD CreatedBy VARCHAR(512) AFTER ServiceId,
+ ADD ExpireDate DATETIME;
+
+
+-- Distributor
+-- --------------------------
+
+ALTER TABLE distributors
+ ADD DistributorBalance DECIMAL(18,6) AFTER IsActive;
+
+-- Service Rateplan
+-- --------------------------
+ALTER TABLE rateplans
+ ADD Cost DECIMAL(18,6) AFTER MRPisPercentage;
+
+UPDATE rateplans SET
+  Cost = 0
+WHERE Cost is NULL;
+ 
+
+-- AssignDistributorRateplan
+-- --------------------------
+CREATE TABLE AssignDistributorRateplans (
+   Id INT AUTO_INCREMENT NOT NULL,
+   RateplanId INT,
+   DistributorId INT,
+   IsActive BIT,
+   CreatedBy VARCHAR(256) BINARY,
+   CreatedOn DATETIME,
+   UpdatedBy VARCHAR(256),
+   UpdatedOn DATETIME,
+  PRIMARY KEY (Id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 ROW_FORMAT = DEFAULT;
+
+-- Distributor Transactions
+-- --------------------------
+
+  CREATE TABLE DistributorTransactions (
+   DTId INT AUTO_INCREMENT NOT NULL,
+   ServiceId INT NOT NULL,
+   DistributorId INT NOT NULL,
+   AmountIn DECIMAL(18,6),
+   AmountOut DECIMAL(18,6),
+   CurrentBalance DECIMAL(18,6),
+   CreatedBy VARCHAR(512),
+   CreatedOn DATETIME,
+   AmountInLocal DECIMAL(18,6),
+   AmountOutLocal DECIMAL(18,6),
+   CurrencyId INT,
+   ConvertToUsd DECIMAL(18,6),
+   Remarks VARCHAR(1000),
+   HasDetails BIT,
+  PRIMARY KEY (DTId)
+) ENGINE = InnoDB ROW_FORMAT = DEFAULT;
+
+
+CREATE TABLE DistributorTransactionDetails (
+   Id INT AUTO_INCREMENT NOT NULL,
+   DTId INT NOT NULL,
+   UserName VARCHAR(256),
+   UserTransactionNo INT,
+   DistributorCommission DECIMAL(18,6),
+   DistributorCommissionRateId INT,
+  PRIMARY KEY (Id)
+) ENGINE = InnoDB ROW_FORMAT = DEFAULT;
+
+
+-- Distributor Commission Rateplans
+-- --------------------------
+
+
+CREATE TABLE distributorcommissionrateplans (
+  DCRP_ID int(11) NOT NULL AUTO_INCREMENT,
+  DistributorId int(11) NOT NULL,
+  ServiceId int(11) NOT NULL,
+  Commission decimal(18,6) NOT NULL,
+  IsPercentage bit(1) NOT NULL,
+  Discount decimal(18,6) DEFAULT NULL,
+  IsActive bit(1) DEFAULT NULL,
+  CreatedBy varchar(20) NOT NULL,
+  CreatedOn datetime NOT NULL,
+  ServiceCharge decimal(18,6) DEFAULT NULL,
+  RateName VARCHAR(250),
+  Remarks VARCHAR(250),
+  PRIMARY KEY (DCRP_ID)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+-- New Services 
+-- --------------------------
+
+
+insert into services (Id,Name,DestinationId,ParentId,IsGroup,IsActive,value) VALUES
+(31, 'eBanking Cash Out', 189, 8, 0, 1, 0), 
+(32, 'Pin Assign', 189, 34, 0, 1, 0), 
+(33, 'Pin Return', 189, 34, 0, 1, 0), 
+(34, 'Distributor Operations', 14, 0, 1, 1, 0), 
+(35, 'Distributor Cash In', 14, 34, 0, 1, 0), 
+(36, 'Distributor Cash Out', 14, 34, 0, 1, 0), 
+(37, 'Distributor Disputes', 14, 34, 0, 1, 0);
+
+
+-- Links
+-- --------------------------
+
+Insert INTO Links (AId, Name, Parent, Url, IsParent, IsActive, ControllerName, ActionName, SequenceId, GroupName) VALUES
+( 1, 'Distributor Comission Rateplan', 0, 'a', 0, 1, 'DistributorController', 'DistributorComissionRateplanIndex', 5, 'Distributor'), 
+( 1, 'Distributor Pins', 0, 'a', 0, 1, 'DistributorController', 'DistributorPins', 5, 'Distributor'), 
+( 1, 'Distributors', 0, 'a', 0, 1, 'DistributorController', 'Distributors', 5, 'Distributor'), 
+( 1, 'Distributor Transactions', 0, 'a', 0, 1, 'DistributorController', 'DistributorTransaction', 5, 'Distributor');
+
+Delete FROM Links WHERE Name LIKE 'Distributor';

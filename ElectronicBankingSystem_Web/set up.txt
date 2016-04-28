@@ -1,0 +1,24 @@
+follow the steps below to upgrade from eBanking release 1.3.4.1
+
+1. run all scripts defined in "db changes.text" and make sure to update the values inside scripts that are added as comments
+2. add roles to system user for vendorsController	->	Index,
+							->	Create,
+							->	Details
+
+				VendorTransactionController ->  Index,
+							    ->  VendorRecharge
+
+				VendorTariffsController	->	Index,
+							->	Create,
+							->	Details
+
+				resellerController	->	eBankingCashIn
+
+				PinController		->	bulkPinActivation
+				SMS
+
+3. Do VendorRecharge for all existing vendors to activate transactions (otherwise transactions will not be done)
+4. Insert VendorTariff for all services (otherwise services will not be available for system, ConversionRate should be 80)
+5. Revise Rateplans and change all ConversionRate to 80
+6. Insert VendorRoute
+7. update sequescer in db for ezzetopup to match up with vendor

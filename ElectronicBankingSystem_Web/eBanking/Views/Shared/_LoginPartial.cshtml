@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNet.Identity
+@using eBanking.Models;
+
+@{
+    decimal TotalBalance = 0;
+    string userName=null;
+    string CurrencyUnit = "";
+    string UserName = User.Identity.GetUserName();
+    decimal? DistributorBalance = null;
+}
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Hello " + UserName, "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage", style = "color:white" })
+        </li>     
+         @{
+        //eBankingDbContext db = new eBankingDbContext();
+        eBanking.Interface.IAdminRepository admin_repo = new eBanking.Abstract.AdminRepository();
+        eBanking.Interface.ICurrencyRepository currency_repo = new eBanking.Abstract.CurrencyRepository();
+        eBanking.Controllers.DistributorController distController = new eBanking.Controllers.DistributorController();
+        userName = User.Identity.GetUserName().ToString();
+        
+
+        
+        try 
+        {
+            var ActiveUser = admin_repo.GetUserByUserName(userName);//db.Users.Where(x => x.UserName == userName).Select(x => x).SingleOrDefault();
+            if (ActiveUser == null)
+            {  TotalBalance = 0;}
+            else
+            {
+            
+                TotalBalance = currency_repo.ConvertToLocal(ActiveUser.CurrentBalance,ActiveUser.LocalCurrencyId);
+
+                CurrencyUnit = admin_repo.GetUserCurrencyISOByUserName(UserName);//db.Currencies.Find(Balance.LocalCurrencyId).ISO;
+                DistributorBalance = distController.GetDestributorBalance(userName);
+            }
+
+        }
+        catch(Exception ex){
+
+            string a = ex.Message;
+            TotalBalance = -1;
+        }
+
+        }
+
+   
+        @if(TotalBalance!=-1)
+            { 
+            <li>
+                <a href="#">Balance: <span style="font-weight:bold;color:white" id="creditLimit"> @TotalBalance @CurrencyUnit</span></a>
+            </li>
+            if (DistributorBalance != null)
+            {
+                <li>
+                    <a href="#">(Distributor Balance: <span style="font-weight:bold;color:white" id="creditLimit"> $@DistributorBalance USD</span>)</a>
+                </li>
+            }
+            }
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+
+        
+    </ul>
+}
+
+

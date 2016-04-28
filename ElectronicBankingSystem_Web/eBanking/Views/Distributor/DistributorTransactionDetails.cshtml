@@ -1,0 +1,90 @@
+﻿@using eBanking.Models;
+@*@using PagedList.Mvc;*@
+@model IEnumerable<eBanking.Models.DistributorTransactionDetailVM>
+@{
+    ViewBag.Title = "DistributorTransactionDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int serialNo = 0;
+}
+
+
+<div class="container">
+<h3 class="text-center page-header">Distributor Transaction Details</h3>
+
+
+    <div class="bordered-container">
+        <span class=" border-title">
+            Distributor Transaction Records
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table small-font">
+                <tr>
+                    <th>
+                        Sr.No
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        Recipent No.
+                    </th>
+                    <th>
+                        Service Name
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Transaction Number
+                    </th>
+                    <th>
+                        Commission (USD)
+                    </th>
+                </tr>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        serialNo++;
+                        <tr>
+                            <td>
+                             @serialNo
+                            </td>
+                            <td>
+                                @item.Date
+                            </td>
+                            <td>
+                                @item.UserName
+                            </td>
+                            <td>
+                                @item.RecipentNo
+                            </td>
+                            <td>
+                                @item.ServiceName
+                            </td>
+                            <td>
+                                @item.Amount
+                            </td>
+                            <td>
+                                @item.UserTransactionNo
+                            </td>
+                            <td>
+                                @item.DistributorCommission
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Total Commission</strong></td>
+                    <td><strong>@Model.Sum(i => i.DistributorCommission)</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

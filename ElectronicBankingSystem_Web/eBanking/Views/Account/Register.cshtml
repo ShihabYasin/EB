@@ -1,0 +1,108 @@
+﻿@model eBanking.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+@*<link href="~/Content/intlTelInput.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/intlTelInput.js"></script>*@
+<h2>@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-xs-12 col-sm-5 col-md-6">
+        <img style="width:100%; height:auto" src="~/Images/login.png" />
+    </div>
+    <div class="col-xs-12 col-sm-7 col-md-6" style="border:1px solid #0094ff; border-radius: 5px;">
+        <section id="loginForm">
+            @*@using (Html.BeginForm("RegisterAPI", "api/ServiceAPI", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))*@
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal"}))
+            {
+                @Html.AntiForgeryToken()
+                <h4>Use a valid account to Register.</h4>
+                <hr />
+                                    
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "only numeric number or digit.", type="tel", style="display:none" })
+                        @*<input type="tel" id="mobile-number" placeholder="e.g. +1 702 123 4567">*@
+                        
+                        <input id="phone" type="tel" name="phone" class="form-control">
+                        
+                        
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NomineePhoneNumber, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-8">
+                        <input id="nominee" type="tel" name="nominee" class="form-control">
+                        @Html.TextBoxFor(m => m.NomineePhoneNumber, new { @class = "form-control", @placeholder = "only numeric number or digit.", type = "tel", style = "display:none" })
+                    </div>
+                </div>
+                <script>
+                    $("#phone").intlTelInput({
+                        defaultCountry: "auto",
+                        geoIpLookup: function (callback) {
+                            $.get('http://ipinfo.io', function () { }, "jsonp").always(function (resp) {
+                                var countryCode = (resp && resp.country) ? resp.country : "";
+                                callback(countryCode);
+                            });
+                        },
+                        utilsScript: "../../Scripts/utils.js" // just for formatting/placeholders etc
+                    });
+                    $("#nominee").intlTelInput({
+                        defaultCountry: "auto",
+                        geoIpLookup: function (callback) {
+                            $.get('http://ipinfo.io', function () { }, "jsonp").always(function (resp) {
+                                var countryCode = (resp && resp.country) ? resp.country : "";
+                                callback(countryCode);
+                            });
+                        },
+                        utilsScript: "../../Scripts/utils.js" // just for formatting/placeholders etc
+                    });
+
+                    // update the hidden input on submit
+                    $("form").validate({
+                        submitHandler: function (form) {
+                            var phoneNumber = $("#phone").intlTelInput("getNumber");
+                            var nomineeNumber = $("#nominee").intlTelInput("getNumber");
+                            alert("Phone Number = " + phoneNumber + "\nNominee Numer = " + nomineeNumber);
+                            intRegex = /[0-9]$/;
+                            if (phoneNumber.substring(0, 3) == "880") {
+                                if (phoneNumber.length != 13 || !intRegex.test(phoneNumber)) {
+                                    alert("Invalid Phone Number");
+                                    return false;
+                                }
+                            }
+                            if (nomineeNumber.substring(0, 3) == "880") {
+                                if (nomineeNumber.length != 13 || !intRegex.test(nomineeNumber)) {
+                                    alert("Invalid Nominee Number");
+                                    return false;
+                                }
+                            }
+                                    
+                            $("#UserName").val(phoneNumber);
+                            $("#NomineePhoneNumber").val(nomineeNumber);
+                            form.submit();
+                        }
+                    });
+                </script>
+                 <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-success" value="Register" />
+                    </div>
+                </div>
+            
+            }
+        </section>
+    </div>
+
+</div>
+
+@*<script>
+    $("#UserName").intlTelInput();
+</script>*@
+

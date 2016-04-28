@@ -1,0 +1,58 @@
+﻿@model eBanking.Models.Pin
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Pin</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Edit Pin
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.Id)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SerialNo, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.SerialNo, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.SerialNo)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Value, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Value, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Value)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrencyID, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.CurrencyID, ViewData["Currency"] as SelectList, "--Please select a Currency--", new { @class = "form-control" })
+                   
+                            @Html.ValidationMessageFor(model => model.CurrencyID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+    </div>
+</div>

@@ -1,0 +1,164 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.TransferHistory>
+
+@{
+    ViewBag.Title = "TransferHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+
+
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+@*<link href="~/Content/popBox1.3.0.css" rel="stylesheet" />*@
+<div class="container">
+    <h3 class="text-center page-header">Transfer History</h3>
+
+    @using (Html.BeginForm("TransferHistory", "Transaction", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search
+            </span>
+            <div class="bordered-container-inner">
+                @using (Html.BeginForm("TransferHistory", "Transaction", FormMethod.Get, new { @class = "form-horizontal" }))
+                {
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="BatchNumber" class="control-label col-md-2 no-padding-right">Search By Month</label>
+                            <div class="col-md-3">
+                                @Html.DropDownList("month", ViewData["MonthSelector"] as SelectList, "-- Select Month --", new { @class = "form-control" })
+                            </div>
+                            <label for="PinCode" class="control-label col-md-1 no-padding-right">Search by year</label>
+                            <div class="col-md-3">
+                                @Html.DropDownList("year", ViewData["YearSelector"] as SelectList,"-- Select Year --", new { @class = "form-control" })
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 no-padding-right"> Items Per Page</label>
+                            <div class="col-md-3">
+                                @Html.DropDownList("itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control" })
+                            </div>
+                            @*<label class="control-label col-md-2 no-padding-right"> &nbsp;</label>*@
+                            <div class="col-md-3">
+                                <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+            </div>
+        </div>
+    }   
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search Results
+            </span>
+            <div class="bordered-container-inner">
+ 
+                <div>
+                    <table class="table table-striped small-font">
+                        <tr>
+                            <th class ="small-td text-center">
+                                Sr No
+                            </th>
+                            <th class="small-td text-center">
+                                Transaction Number
+                            </th>
+                            <th class="small-td text-center">
+                                Submission Time                                
+                            </th>
+                            <th class="small-td text-center">
+                                Country Name                                
+                            </th>
+                            <th class="small-td text-center">
+                                Bank Name                                
+                            </th>
+                            <th class="small-td text-center">
+                                Recipient                                
+                            </th>
+                            <th class="small-td text-center">
+                                Amount in local currency                                
+                            </th>
+                            <th class="small-td text-center">
+                                Processing Fee                                
+                            </th>
+                            <th class="small-td text-center">
+                                amount in USD                                
+                            </th>
+                            <th class="small-td text-center">
+                                Execution Time                                
+                            </th>
+                            <th class="small-td text-center">
+                                Status
+                            </th>
+                           
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                    @*@Html.TextBox("Model[" + @i + "].Id", Model[i].Id, new { @readonly = "readonly", style = "display:none;" })*@
+                                    @Html.TextBoxFor(model => item.Id, new { style = "display:none;" })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => item.OperationNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TransactionDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MBankDestination)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BankName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MBankNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InsertedAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProcessingFee)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AmountOut)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UpdateDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                    @if (!item.IsTimeOut)
+                                    {
+                                        @Html.ActionLink("Cancel", "CancelTransaction", new { id = item.Id }, new { @class = "btn btn-xs btn-danger" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                    <table class="table center-table borderless">
+                        <tr>
+                            <th class="text-center">
+                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                <br />
+                                @Html.PagedListPager(Model, page => Url.Action("TransferHistory", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, itemsPerPage = ViewBag.ItemsPerPage }))
+                            </th>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>

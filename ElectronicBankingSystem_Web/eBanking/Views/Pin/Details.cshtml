@@ -1,0 +1,52 @@
+﻿@model eBanking.Models.PinViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Pin</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Details
+        </span>
+        <div class="bordered-container-inner">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.PinCode)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PinCode)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Value)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Value)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CurrencyName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CurrencyName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Status)
+                </dd>
+
+            </dl>
+        </div>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning btn-xs" })*@
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+    </div>
+</div>

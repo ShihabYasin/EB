@@ -1,0 +1,162 @@
+﻿
+
+@using Microsoft.AspNet.Identity.EntityFramework
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<eBanking.Models.UserEditViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    
+    if (ViewBag.Menu != null)
+    { 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    int row = (Model.PageNumber - 1) * Model.PageSize;
+}
+<style>
+    tr td, tr th {
+        padding: 2px !important;
+    }
+</style>
+<h3 class="text-center page-header">Users</h3>
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Get))
+    {
+<script src="~/Scripts/jquery.jstepper.js"></script>
+    @Html.AntiForgeryToken()
+
+    <div class="bordered-container">
+
+       <span class=" border-title">
+          Search
+       </span>
+    <div class="bordered-container-inner">
+        <div class="form-inline">
+            <div class="form-group form-group-restricted">
+                <label for="Name">By Name</label>
+                @Html.TextBox("Name", ViewBag.Name as string, new { @class = "form-control" })  
+
+                
+            </div>
+            <div class="form-group form-group-restricted">
+                <label for="UserRole">User Role</label>
+                @Html.DropDownList("UserRole", ViewBag.UserRole as SelectList, "Select Role", new { @class = "form-control" })
+            </div>
+            <div class="form-group form-group-restricted">
+                <label for="UserRole">Country Code</label>
+                @Html.DropDownList("CountryCode", ViewBag.CountryCodeList as SelectList, "Select Country", new { @class = "form-control" })
+            </div>      
+            <div class="form-group form-group-restricted">
+                <label> &nbsp;</label>
+                <input type="submit" class="form-control btn btn-primary" name="f5" id="f5" value="Search" />
+
+            </div>
+        </div>
+      </div>
+   </div>
+}    
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+    
+    <div class="container">
+      <div class="bordered-container">
+
+        <span class="border-title">
+            User Accounts
+        </span>
+        <div class="bordered-container-inner">
+            <table class="table table-striped">
+                <tr>
+                    <th>Sr No</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Email</th>
+                    <th>Active</th>
+                    <th>User Role</th>
+                    <th>Current Balance</th>
+                    <th>Created Date</th>
+                    <th>
+                        @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary btn-xs  btn-success btn-create" })
+                    </th>
+                </tr>
+
+
+                @if (Model.Count() == 0)
+                {
+                    <tr><td colspan="6" class="text-center">No User Accounts</td></tr>
+                }
+                else
+                {
+                    //IdentityUser user in Model
+                    foreach (var user in Model)
+                    {
+                        row++;
+                        <tr>
+                            <td>@row</td>
+
+                            <td>@user.UserName</td>
+                            <td>@user.CountryName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                @Html.CheckBox("CheckBox", user.IsActive, new {type = "checkbox", @readonly = "readonly" })
+                            </td>
+
+                           <td>@user.RoleName</td>
+                            <td>@user.CurrentBalance</td>
+                            <td>@user.CreatedDate</td>
+                            <td>
+
+                                @Html.ActionLink("Edit", "Edit", new { name = user.UserName }, new { @class = "btn btn-warning btn-xs" })
+                                @*@Html.ActionLink("Edit", "Edit", new { ajaxLoad = 1, id = user.Id, name = user.UserName }, new { @class = "btn btn-primary btn-xs" })*@
+
+                                @*@Ajax.ActionLink("Edit", "Edit", new { ajaxLoad = 1, name = user.UserName },
+                                                    new AjaxOptions
+                                                    {
+                                                        HttpMethod = "GET",
+                                                        InsertionMode = InsertionMode.Replace,
+                                                        UpdateTargetId = "mainContentPage"
+                                                        //OnBegin = "show_loading",
+                                                        //OnComplete = "hide_loading"
+                                                    },
+                                                                        new { @class = "btn btn-warning btn-xs" }
+                                                )*@
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <table class="table center-table borderless">
+                <tr>
+                    <td></td>
+                    <th class="text-center">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        <br />
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, UserRole = ViewBag.UserRoleSelected, Name = ViewBag.Name, Country = ViewBag.SelectedCountry }))
+                    </th>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    @*@Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary" })*@
+
+
+
+    @*@Ajax.ActionLink("Create", "Create", "Admin", new { ajaxLoad = 1 },
+                                                    new AjaxOptions
+                                                    {
+                                                        HttpMethod = "GET",
+                                                        InsertionMode = InsertionMode.Replace,
+                                                        UpdateTargetId = "mainContentPage",
+                                                        OnBegin = "show_loading",
+                                                        OnComplete = "hide_loading"
+                                                    },
+                                                        new { @class = "btn btn-primary" }
+                                                )*@
+</div>
+
+}

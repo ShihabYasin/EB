@@ -1,0 +1,68 @@
+﻿@model eBanking.Models.Vendor
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3 class="text-center page-header">Vendor</h3>
+    <div class="container">
+        <div class="bordered-container">
+            <span class=" border-title">
+                Create New Vendor
+            </span>
+            <div class="bordered-container-inner">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true)
+                        <br />
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.IsActive, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.IsActive)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LocalCurrencyId, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(mode => mode.LocalCurrencyId, (SelectList)ViewBag.CurrencyList, "--Select Local Currency--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.LocalCurrencyId)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentBalance, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.CurrentBalance, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CurrentBalance)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+                </div>
+            </div>
+        </div>
+    </div>
+

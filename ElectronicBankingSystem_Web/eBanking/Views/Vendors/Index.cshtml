@@ -1,0 +1,120 @@
+﻿@model IEnumerable<eBanking.Models.Vendor>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+
+<h3 class="text-center page-header">Vendor</h3>
+<div class="container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+            <div class="bordered-container">
+        <div class="form-horizontal">
+            <div class="form-horizontal">
+                <span class="border-title">
+                    Search
+                </span>
+                <div class="bordered-container-inner">
+                    <div class="form-group">
+                        <label for="Name" class="control-label col-md-2 no-padding-right"> Name</label>
+                        <div class="col-md-2">
+                            @Html.DropDownList("Name", ViewBag.VendorNameList as SelectList, "--Select Vendor--", new { @class = "form-control" })
+                            @*@Html.TextBox("Name", "", new { @class = "form-control", value = ViewBag.Name })*@
+                        </div>
+                        <label for="IsActive" class="control-label col-md-2 no-padding-right">IsActive</label>
+                        <div class="col-md-2">
+                            @Html.DropDownList("IsActive", ViewBag.IsActiveList as SelectList, "--Select Active Status--", new { @class = "form-contro" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="From Date" class="control-label col-lg-2 no-padding-right">From Date</label>
+                        <div class="col-md-2">
+                            @Html.TextBox("FromDate", "", new { @class = "form-control pickDate", value = ViewBag.From })
+                        </div>
+                        <label for="ToDate" class="control-label col-md-2 no-padding-right">To Date</label>
+                        <div class="col-md-2">
+                            @Html.TextBox("ToDate", "", new { @class = "form-control pickDate", value = ViewBag.ToDate })
+                        </div>
+
+                        <label class="control-label col-md-1 no-padding-right">&nbsp;</label>
+                        <div class="col-mod-2">                            
+                            <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" /> 
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+    <div class="bordered-container">
+        <span class=" border-title">
+            Vendor
+        </span>
+        
+        <div class="bordered-container-inner">
+            <table class="table table-striped no-margin">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedOn)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LocalCurrencyId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CurrentBalance)
+                    </th>
+                    <th>@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs  btn-success btn-create" })</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedOn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LocalCurrencyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CurrentBalance)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })*@
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            </div>
+        </div>
+
+    }
+</div>
+
+<script>
+    $(".pickDate").datepicker({ dateFormat: 'dd-mm-yy' });
+</script>

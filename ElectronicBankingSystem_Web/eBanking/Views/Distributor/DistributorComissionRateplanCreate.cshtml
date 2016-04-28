@@ -1,0 +1,205 @@
+﻿@model eBanking.Models.DistributorCommissionRateplan
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Distributor</h3>
+<script src="~/Scripts/jquery.jstepper.js"></script>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Create New Distributor Commission Rateplan
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @if (ViewBag.ApiStatus != null && ViewBag.ApiStatus == 30)
+                    {
+                        <div class="alert alert-success">@ViewBag.Message</div>
+                    }
+                    else if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Message</div>
+                    }
+                    @Html.ValidationSummary(true)
+
+                    @*<div class="form-group">
+                            @Html.Label("Distributor", new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.DistributorId, ViewData["DistributorUserNameList"] as SelectList, "--Select a User--", new { @class = "form-control" })
+                                @Html.ValidationMessage("ResellerId")
+
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceId, new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.ServiceId, ViewData["ServiceList"] as SelectList, "--Please select a Service--", new { @class = "form-control", @onchange = "enableCommission()" })
+
+                            @Html.ValidationMessageFor(model => model.ServiceId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Rate Name", new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.RateName, new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.RateName)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Commission, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="form-control" style="max-width:600px;">
+                                <div class="prefix">
+                                    <span id="prefix">
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Commission, new
+                               {
+                                   style = "width:90% !important;border: none;"@*, onkeyup = "calculate()"*@ })
+                                    @Html.ValidationMessageFor(model => model.Commission)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsPercentage, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(model => model.IsPercentage)
+                            @Html.ValidationMessageFor(model => model.IsPercentage)
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display:none">
+                        @Html.LabelFor(model => model.Discount, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Discount, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Discount)
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.ServiceCharge, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.ServiceCharge, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceCharge)
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Remarks, new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.Remarks)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @Html.ActionLink("Back to List", "DistributorComissionRateplanIndex", null, new { @class = "btn btn-primary btn-xs" })
+
+    </div>
+</div>
+
+<script>
+    var DCRPList;
+    var userRole = "";
+    function set(value) {
+        return value;
+    }
+    function getObjects(obj, key, val) {
+        var objects = [];
+        for (var i in obj) {
+            if (!obj.hasOwnProperty(i)) continue;
+            if (typeof obj[i] == 'object') {
+                objects = objects.concat(getObjects(obj[i], key, val));
+            } else if (i == key && obj[key] == val) {
+                objects.push(obj);
+            }
+        }
+        return objects;
+    }
+    function calculate() {
+        var ServiceId = $("#ServiceId").val();
+        if (ServiceId == null || ServiceId < 1)
+        {
+            $("#Commission").attr("disabled","disabled");
+            return;
+        }
+        var selectedDcrp = getObjects(DCRPList, "ServiceId", ServiceId);
+        selectedDcrp = selectedDcrp[0];
+        var creditLimit = parseFloat(selectedDcrp.AllowedCommission);
+        //console.log("fired, creditLimit : " + creditLimit);
+        if (creditLimit > 0) {
+            //console.log("jstepper reset");
+            $('#Commission').prop('readonly', false);
+            $("#Commission").val("");
+            if(userRole == null || userRole != "Admin")
+                $("#Commission").jStepper({ minValue: 0, maxValue: creditLimit });
+            console.log("userRole = " + userRole);
+        }
+        else if (creditLimit == 0 && (userRole == null || userRole != "Admin")) {
+            $("#Commission").val(0);
+            $('#Commission').prop('readonly', true);
+        }
+        else if (userRole != null && userRole == "Admin") {
+            $("#Commission").val(0);
+        }
+        else {
+            //console.log("jstepper reset failed");
+            $("#Commission").val("You cannot exceed your allowed commission!");
+            $("#Commission").attr("disabled", "disabled");
+        }
+        if (selectedDcrp.IsPercentage == true){
+            $("#prefix").html("%");
+            $("#IsPercentage").prop('checked', true);
+        }
+        else {
+            $("#prefix").html("USD");
+            $("#IsPercentage").prop('checked', false);
+
+        }
+    }
+    function enableCommission() {
+        if ($("#ServiceId").val() == null || $("#ServiceId").val() < 1){
+            $("#Commission, #Discount, #IsActive, #IsPercentage").attr("disabled", "disabled");
+            $('input[type="submit"]').prop('disabled', true);
+        }
+        else {
+            $("#Commission, #Discount, #IsActive, #IsPercentage").removeAttr("disabled");
+            $('input[type="submit"]').prop('disabled', false);
+            calculate();
+        }
+    }
+    $(document).ready(function () {
+        DCRPList = set(@Html.Raw(Json.Encode(ViewData["DCRPList"])));
+        userRole = set(@Html.Raw(Json.Encode(ViewBag.UserRole)));
+        //alert(JSON.stringify(DCRPList));
+        enableCommission();
+    })
+</script>

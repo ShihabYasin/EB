@@ -1,0 +1,284 @@
+﻿
+@using eBanking.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.Pin>
+@*@model List<eBanking.Models.Pin>*@
+
+@{
+    ViewBag.Title = "Pin Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     int row = (Model.PageNumber - 1) *  Model.PageSize;
+
+     //IList<eBankingUser> user = ViewBag.ResellerId;
+     IEnumerable<Distributor> allDistributors = (IEnumerable<Distributor>)ViewData["Distributor"];
+
+}
+
+<div class="container" id="ManageTransferPage">
+    <h3 class="text-center page-header">Active option</h3>
+
+
+    <div class="bordered-container">
+        <span class=" border-title">
+            Search
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm("PinManage", "Pin", FormMethod.Get, new { @class = "form-horizontal" }))
+            {
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="BatchNumber" class="control-label col-md-2 no-padding-right">Batch Number</label>
+                        <div class="col-md-3">
+                            @Html.TextBox("BatchNumber", "", new { @class = "form-control", value = ViewBag.BatchNumber })
+                        </div>
+                        <label for="PinCode" class="control-label col-md-1 no-padding-right">Pin Code</label>
+                        <div class="col-md-3">
+                            @Html.TextBox("PinCode", "", new { @class = "form-control", value = ViewBag.PinCode })
+                        </div>
+                        <label for="f1" class="control-label col-md-1 no-padding-right" >Value</label>
+                        <div class="col-md-2">
+                            @Html.TextBox("Value", "", new { @class = "form-control", value = ViewBag.Value })
+                        </div>                        
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2 no-padding-right"> Items Per Page</label>
+                        <div class="col-md-3">
+                            @Html.DropDownList("itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control" })
+                        </div>
+                        @*<label class="control-label col-md-2 no-padding-right"> &nbsp;</label>*@
+                        <div class="col-md-3">
+                            <input type="submit" class="btn btn-primary" name="f5" id="f5" value="Search" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="container">
+
+  </div>
+
+
+
+    <div class="container">
+        <div class="bordered-container">
+            <span class=" border-title">
+                Pin List
+            </span>
+
+            <div class="bordered-container-inner">
+                @using (Html.BeginForm("PinManage", "Pin", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <button type="submit" value="Update" class="btn btn-success btn-success-extended pull-right">Active Pin</button>
+                        @*<div class="col-md-10">
+                            @*<input type="submit" value="Update" class="btn btn-success" />*@  @*btn btn-default
+                            </div>*@
+                    </div>
+
+                    <div class="form-horizontal">
+
+                        <div class="form-group">
+                            @Html.ValidationSummary(true)
+                        </div>
+
+                    </div>
+
+                    <table class="table small-font table-striped no-margin">
+
+                        <tr>
+                            <th class="small-td text-center">
+                                Sr No.
+                            </th>
+                            <th class="small-td text-center">
+                                Created Date
+                            </th>
+                            <th class="small-td text-center">
+                                Prefix
+                            </th>
+                            <th class="small-td text-center">
+                                Serial Number
+                            </th>
+                            <th class="small-td text-center">
+                                Batch Number
+                            </th>
+                            <th class="small-td text-center">
+                                Pin Code
+                            </th>
+                            <th class="small-td text-center">
+                                Value
+                            </th>
+                            @*<th class="small-td text-center">
+                                Status
+                            </th>*@
+                            <th class="small-td text-center">
+                                Assign To All
+                                <br />
+                                @Html.DropDownList("DestributorCode", new SelectList(allDistributors, "DistributorCode", "UserName"), "select user", new { onchange = "GetSelectedItem(this.value)" })
+                            </th>
+                            <th class="small-td  text-center">
+                                Select All
+                                <br />
+                                @Html.CheckBox("ID", new { type = "checkbox", onchange = "checkAll(this)" })
+                                  
+                            </th>
+                        </tr>
+
+                        @if (Model.Count == 0)
+                        {
+                            <tr><td colspan="3" class="text-center">No User Accounts</td></tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                row++;
+                                  
+                                    
+                                <tr>
+                                    <td class="small-td text-center">
+                                        @row
+                                    </td>
+
+                                    @Html.TextBox("Model[" + @i + "].Id", Model[i].Id, new { @readonly = "readonly", style = "display:none;" })
+
+                                    @Html.TextBox("Model[" + @i + "].CurrencyID", Model[i].CurrencyID, new { @readonly = "readonly", style = "display:none;" })
+
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].CreationDate", Model[i].CreationDate, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].SerialNo", Model[i].PinPrefix, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].SerialNo", Model[i].SerialNo, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].BatchNumber", Model[i].BatchNumber, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].PinCode", Model[i].PinCode, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    <td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].Value", Model[i].Value, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>
+                                    @*<td class="small-td text-center">
+                                        @Html.TextBox("Model[" + @i + "].Status", Model[i].Status, new { @readonly = "readonly", @class = "textbox-transparent" })
+                                    </td>*@
+
+                                    <td class="small-td text-center">
+                                        @if (Model[i].DistributorCode != null)
+                                        {                      
+                                            @Html.DropDownList("Model[" + @i + "].DistributorCode", new SelectList(allDistributors, "DistributorCode", "UserName", Model[i].DistributorCode), "Assign To", new { style = "border:none", @class = "textbox-transparent dropdown" })
+                                        }
+                                        else
+                                        {               
+                                            @Html.DropDownList("Model[" + @i + "].DistributorCode", new SelectList(allDistributors, "DistributorCode", "UserName"), "Assign To", new { style = "border:none", @class = "textbox-transparent dropdown" })                      
+                                        }
+                                    </td>
+
+                                    <td class="small-td text-center">
+
+                                        @Html.CheckBox("Model[" + @i + "].IsActive", Model[i].IsActive, new { type = "checkbox", @class = "checkbox1", onchange = "checkChecked(this)" })
+                                    </td>
+
+
+                                </tr>
+                            }
+                        }
+                    </table>
+                }
+                <table class="table center-table borderless">
+                    <tr>
+                        <td></td>
+                        <th class="text-center">
+                            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                            <br />
+                            @Html.PagedListPager(Model, page => Url.Action("PinManage", new { BatchNumber = @ViewBag.BatchNumber, PinCode = @ViewBag.PinCode, Value = @ViewBag.Value, page = page, itemsPerPage = ViewBag.ItemsPerPage }))
+                        </th>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <script>
+
+        $(document).ready(function () {
+            $("#wrapper").addClass("toggled");
+            var itemsPerPage = '@ViewBag.ItemsPerPage';
+            if (!isNaN(itemsPerPage) && itemsPerPage > 0)
+                $("#pagination-itemsPerPage").val(itemsPerPage);
+        });
+
+        function checkAll(ele) {
+            var checkboxes = document.getElementsByClassName('checkbox1');
+            //getElementsByTagName('input');
+            if (ele.checked) {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    console.log(i)
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = false;
+                    }
+                }
+            }
+        }
+
+        function checkChecked(ele) {
+            var uncheck_count = 0;
+            var checkboxes = document.getElementsByClassName('checkbox1');
+            // getElementsByTagName('input');
+
+            if (ele.checked) {
+                //check every chekbox if all check box is checked then to checked in select all
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        if (checkboxes[i].checked == false) {
+                            if (document.getElementById("ID").checked == true)
+                                document.getElementById("ID").checked = false;
+                            uncheck_count = 1;
+                            break;
+                        }
+                        else {
+
+                        }
+                    }
+                }
+
+                //all check box is checked
+                if (uncheck_count == 0) {
+                    if (document.getElementById("ID").checked == false)
+                        document.getElementById("ID").checked = true;
+                }
+            }
+                //for uncheck
+            else {
+                if (document.getElementById("ID").checked == true)
+                    document.getElementById("ID").checked = false;
+            }
+        }
+
+
+        function GetSelectedItem(el) {
+             //alert(el);
+            var e = document.getElementsByClassName('dropdown');
+            for (var i = 0; i < e.length; i++)
+            {
+                var Id = 'Model_' + i + '__DistributorUserName';
+                var dropdown = document.getElementById(Id).value=el;
+            }
+        }
+
+
+    </script>
+

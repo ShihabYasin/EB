@@ -1,0 +1,93 @@
+﻿@model eBanking.Models.CreditTransfer
+@{
+    ViewBag.Title = "Credit Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.jstepper.js"></script>
+
+<h3 class="text-center page-header">Credit Transfer</h3>
+
+
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+          Transfer Your Balance
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+
+                        @Html.ValidationSummary(true)
+                    </div>
+
+                        @if (ViewBag.Message != null)
+                         {
+                            <div class="form-group">
+                                <label style="color:#19a709" class="control-label col-md-7">@ViewBag.Message </label>
+                            </div>
+                        }
+                        <div class="form-group">
+
+                            <label class="control-label col-md-3">Transfer To</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.ToUser, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ToUser)
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label class="control-label col-md-3">Transfer Amount</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(model => model.Balance, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Balance)
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-10">
+                                <input type="submit" value="Transfer" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var creditLimit = parseFloat($("#creditLimit").text());
+        //console.log("fired, creditLimit : " + creditLimit);
+        if (creditLimit > 1)
+        {
+            $("#Balance").jStepper({ minValue: 1, maxValue: creditLimit });
+        }
+        else {
+            $("#Balance").val("You dont have sufficient credit, please recharge!");
+            $("#Balance").attr("disabled", "disabled");
+        }
+
+    });
+    
+</script>
+
+@if (ViewBag.Message == "Credit Transfer Successful")
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ToUser').val("");
+            $('#Balance').val("");
+        })
+
+
+    </script>
+
+}

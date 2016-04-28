@@ -1,0 +1,200 @@
+﻿@model eBanking.Models.RegisteredUserStatusViewModel
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<h3 class="text-center page-header">&nbsp;</h3>*@
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>eBanking</h1>
+        <p class="lead">eBanking gets your banking preferences and requirements at your finger tips.</p>
+    </div>
+    
+
+
+    @if(Model !=null)
+    { 
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="bordered-container">
+                    <span class="border-title">Money Transfer</span>
+                <div class="bordered-container-inner">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Recipient</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(Model.MoneyTransfer !=null)
+                            { 
+                              if (Model.MoneyTransfer.Count > 0)
+                            {
+                                foreach (var item in Model.MoneyTransfer)
+                                {
+                                    <tr>
+                                        <td>@item.TransactionDate.Value.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.ToUser</td>
+                                        <td>@item.InsertedAmount</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3"><h4>No records found</h4></td>
+                                </tr>
+                            }
+                          }else
+                            { 
+                             <tr>
+                                    <td colspan="3"><h4>Loading Error !!</h4></td>
+                             </tr>
+                            }
+
+                          
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="bordered-container">
+                <span class="border-title">Credit Transfer</span>
+                <div class="bordered-container-inner">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Recipient</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if(Model.CreditTransfer !=null)
+                            { 
+                             if (Model.CreditTransfer.Count > 0)
+                            {
+                                foreach (var item in Model.CreditTransfer)
+                                {
+                                    <tr>
+                                        <td>@item.TransactionDate.Value.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.ToUser</td>
+                                        <td>@item.AmountOut</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3"><h4>No records found</h4></td>
+                                </tr>
+                            }
+                            }else
+                            { 
+                             <tr>
+                                    <td colspan="3"><h4>Loading Error !!</h4></td>
+                             </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="bordered-container">
+                <span class="border-title">TopUp</span>
+                <div class="bordered-container-inner">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Recipient</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.TopUp.Count > 0)
+                            {
+                                foreach (var item in Model.TopUp)
+                                {
+                                    <tr>
+                                        <td>@item.TransactionDate.Value.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.ToUser</td>
+                                        <td>@item.InsertedAmount</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3"><h4>No records found</h4></td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+           
+                
+        </div>
+        @*<div class="col-md-6 col-sm-12">
+            
+                <h3>Summery</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Amount In</th>
+                            <th>Amount Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Money Transfer</td>
+                            <td>@Model.MoneyTransferIn</td>
+                            <td>@Model.MoneyTransferOut</td>
+                        </tr>
+                        <tr>
+                            <td>Top Up</td>
+                            <td>PrePaid</td>
+                            <td>@Model.TopUpPrePaid</td>
+                        </tr>
+                        <tr>
+                            <td>Top Up</td>
+                            <td>PostPaid</td>
+                            <td>@Model.TopUpPostPaid</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>*@
+        
+    </div>
+    }
+</div>
+@if(Model !=null)
+{ 
+<script>
+    $(document).ready(function(){
+
+        function dataValue(data){
+            return data;
+        }
+        var data = dataValue(@Html.Raw(Json.Encode(Model.TransactionHistory)));
+        //console.log(data);
+
+    })
+</script>
+}

@@ -1,0 +1,104 @@
+﻿@model eBanking.Models.RatePlan
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 class="text-center page-header">Rate Plan</h3>
+@*<hr class="page-header-seperator" />*@
+<div class="container">
+    <div class="bordered-container">
+        <span class=" border-title">
+            Edit Rate Plan
+        </span>
+        <div class="bordered-container-inner">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.Id)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceId, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.ServiceId, ViewData["ChildService"] as SelectList, "--Select a Service--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromCurrencyId, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.FromCurrencyId, ViewData["FromCurrency"] as SelectList, "--Select a currency--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FromCurrencyId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToCurrencyId, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.ToCurrencyId, ViewData["ToCurrency"] as SelectList, "--Select a currency--", new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.ToCurrencyId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConvertionRate, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.ConvertionRate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ConvertionRate)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceCharge, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.ServiceCharge, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceCharge)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PendingTime, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.PendingTime, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PendingTime)
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.CreatedDate, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CreatedDate, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CreatedDate)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedBy, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CreatedBy, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CreatedBy)
+                        </div>
+                    </div>*@
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.IsActive, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" value="Save" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-xs" })
+    </div>
+</div>

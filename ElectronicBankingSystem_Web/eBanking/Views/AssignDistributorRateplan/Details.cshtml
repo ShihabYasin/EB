@@ -1,0 +1,82 @@
+﻿@model eBanking.Models.AssignDistributorRateplan
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>AssignDistributorRateplan</h4>
+    	<hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.RateplanId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.RateplanId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DistributorId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DistributorId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.IsAcive)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IsAcive)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreatedBy)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateOn)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateOn)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpdatedBy)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpdatedOn)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpdatedOn)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

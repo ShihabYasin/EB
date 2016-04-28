@@ -1,0 +1,86 @@
+﻿@model IEnumerable<eBanking.Models.RetailerRegisteredUserVM>
+
+@{
+    ViewBag.Title = "RetailerRegisteredUserIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int SrNo = 0;
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<style>
+    tr td, tr th {
+        padding: 4px !important;
+    }
+
+    .table {
+        margin-bottom: 0 !important;
+    }
+</style>
+
+<div class="container">
+    <h3 class="text-center page-header">Registered User List</h3>
+
+    @*@using (Html.BeginForm("RetailerRegisteredUserIndex", "Distributor", FormMethod.Get, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search
+            </span>
+            <div class="bordered-container-inner">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="f1" class="control-label col-md-1 no-padding-right">User</label>
+                        <div class="col-md-2">
+                            @Html.TextBox("UserName", "", new { @class = "form-control", value = ViewBag.User })
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="col-md-offset-1 col-md-2">
+                            <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }*@
+    <div class="bordered-container">
+
+        <table class="table small-font">
+            <tr>
+                <th>
+                    Sr.No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserNme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Balance)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                SrNo++;
+                <tr>
+                    <td>
+                        @SrNo
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserNme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Balance)&nbsp;$
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+

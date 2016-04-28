@@ -1,0 +1,199 @@
+﻿
+@using eBanking.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<eBanking.Models.DistributorTransactionVM>
+@*@model IEnumerable<eBanking.Models.DistributorTransactionVM>*@
+@{
+    ViewBag.Title = "DistributorTransaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int srNO = (Model.PageNumber - 1) * Model.PageSize;
+}
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+@*<style>
+    tr td, tr th {
+        padding: 2px !important;
+    }
+</style>*@
+
+<div class="container" >
+<h3 class="text-center page-header">Distributor Transaction</h3>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="bordered-container">
+            <span class=" border-title">
+                Search
+            </span>
+            <div class="bordered-container-inner">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="f1" class="control-label col-md-2 no-padding-right">Service Name</label>
+                        <div class="col-md-3">
+                            @Html.DropDownList("ServiceId", ViewBag.Servicelist as SelectList, "Select a Service", new { @class = "form-control" })
+                        </div>
+
+                        <label for="Distributor" class="control-label col-md-2 no-padding-right">Distributor</label>
+                        <div class="col-md-3">
+                            @Html.DropDownList("DistributorId", ViewBag.DistributorNameList as SelectList, "-- choose Distributor --", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FromDate" class="control-label col-md-2 no-padding-right">From Date</label>
+                        <div class="col-md-3">
+                            @Html.TextBox("FromDate", "", new { @class = "form-control pickDate", value = ViewBag.FromDate })
+                        </div>
+                        <label for="ToDate" class="control-label col-md-2 no-padding-right">To Date</label>
+                        <div class="col-md-3">
+                            @Html.TextBox("ToDate", "", new { @class = "form-control pickDate", value = ViewBag.ToDate })
+                        </div>
+                        <label class="control-label col-md-1 no-padding-right">&nbsp;</label>
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" name="Search" id="Search" value="Search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bordered-container">
+            <span class=" border-title">
+                Distributor Transaction Records
+            </span>
+            <div class="bordered-container-inner">
+                <table class="table small-font">
+                    <tr>
+                        @*<th>
+                            Id
+                        </th>*@
+                        <th>
+                            Sr No.
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Service Name
+                        </th>                        
+                        <th>
+                            AmountIn
+                        </th>
+                        <th>
+                            AmountOut
+                        </th>
+                        @*<th>
+                            CurrentBalance
+                        </th>*@
+                        <th>
+                            Distributor Name
+                        </th>
+                        <th>
+                            CreatedBy
+                        </th>
+                        
+                        @*<th>
+                            AmountInLocal
+                        </th>
+                        <th>
+                            AmountOutLocal
+                        </th>
+                        <th>
+                            CurrencyId
+                        </th>
+                        <th>
+                            ConvertToUsd
+                        </th>*@
+                    </tr>
+                    @if (Model.Count() == 0)
+                    {
+                        <tr><td colspan="4" class="text-center"> There is no transaction.</td></tr>
+                    }
+
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            srNO++;
+                            <tr>
+                                @*<td>
+                                    @item.Id
+                                </td>*@
+                                <td>
+                                    @srNO
+                                </td>
+                                <td>
+                                    @item.CreatedOn
+                                </td>
+                                <td>
+                                    @if (item.HasDetails != null && item.HasDetails == true)
+                                    {
+                                        @Html.ActionLink(item.ServiceName, "DistributorTransactionDetails", new { DistributorTransactionId = item.Id })
+                                    }
+                                    else
+                                    {
+                                        @item.ServiceName
+                                    }
+                                </td>                                
+                                <td>
+                                    $ @item.AmountIn
+                                </td>
+                                <td>
+                                    $ @item.AmountOut
+                                </td>
+                                @*<td>
+                                    @item.CurrentBalance
+                                </td>*@
+                                <td>
+                                    @item.DistributorName
+                                </td>
+                                <td>
+                                    @item.CreatedBy
+                                </td>                                
+                                @*<td>
+                                    @item.AmountInLocal
+                                </td>
+                                <td>
+                                    @item.AmountOutLocal
+                                </td>
+                                <td>
+                                    @item.CurrencyId
+                                <td>
+                                    @item.ConvertToUsd
+                                </td>*@
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        
+
+        @*<table class="table center-table borderless">
+            <tr>
+                <th class="text-center" style="width:80%;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    <br />
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { Prefix = ViewBag.Prefix, SerialNoFrom = ViewBag.SerialNoFrom, SerialNoTo = ViewBag.SerialNoTo, BatchNumber = ViewBag.BatchNumber, PinCode = ViewBag.PinCode, Value = ViewBag.Value, AssignedTo = ViewBag.AssignedTo, UsedBy = ViewBag.UsedBy, Status = ViewBag.Status, IsActive = ViewBag.IsActive, FromDate = ViewBag.FromDate, ToDate = ViewBag.ToDate, page, itemsPerPage = ViewBag.ItemsPerPage }))
+                </th>
+
+                <th>
+                    Item Per Page
+                    <br />
+                    @Html.DropDownList("pagination-itemsPerPage", ViewData["ItemsPerPageSelector"] as SelectList, new { @class = "form-control", style = "margin-top:10px;" })
+                </th>
+            </tr>
+        </table>*@
+
+    </div>
+    }
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#wrapper").addClass("toggled");
+    });
+    $(" .pickDate").datepicker({ dateFormat: 'dd-M-yy' });
+
+</script>

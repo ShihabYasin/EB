@@ -1,0 +1,228 @@
+﻿@model List<eBanking.Models.TransactionRecordsVM>
+  
+<script src="~/Scripts/Chart.min.js"></script>
+<link rel="stylesheet" href="style.css">
+@{
+    ViewBag.Title = "Transaction Records";
+    string[] a = {"January", "February", "March", "April", "May", "June", "July"}; 
+    }
+
+<style>
+    body {
+        background-color: #FFFFFF;
+    }
+    .sidebar {
+        background: red;
+        margin: 10px;
+        padding: 0 7px 0 7px;
+        width: 400px;
+        border-radius: 10px;
+    }
+    #ClientList {
+        /*text-align: center;*/
+    }
+     /*div.bordered-container {
+        text-align: left;
+        display: block;
+        padding: 10px;
+        padding-left: 15px;
+        margin-bottom: 30px;
+        text-align: justify;
+    }*/
+     .box1 {
+        display: block;
+        padding: 10px;
+        padding-left: 15px;
+        margin-bottom: 30px;
+        text-align: justify;
+    }
+
+    .box2 {
+        display: block;
+        padding: 10px;
+        padding-left:15px;
+        text-align: justify;
+    }
+    .box3 {
+        display: block;
+        padding: 10px;
+        padding-left: 15px;
+        text-align: justify;
+    }
+    .box4 {
+        display: block;
+        padding: 10px;
+        padding-left: 15px;
+        text-align: justify;
+    }
+    .box5 {
+        display: block;
+        padding: 10px;
+        padding-left: 15px;
+        text-align: justify;
+    }
+
+    div.TransactionInformations {
+        width: 900px;
+        height: 200px;
+        margin: auto;
+        border: 3px solid #3696F7;
+        /*float: left*/
+    }
+    div.TransactionLineChart {
+        width: 500px;
+        height: 400px;
+        margin: auto;
+        border: 3px solid #3696F7;
+        /*float: left;*/
+    }
+    div.VendorBalancePieChart {
+        width: 500px;
+        height: 400px;
+        margin: auto;
+        border: 3px solid #3696F7;
+    }
+    div.CustomerTransactionPieChart {
+        width: 500px;
+        height: 400px;
+        margin: auto;
+        border: 3px solid #3696F7;
+    }
+    div.ServiceSpecificGraph {
+        width: 500px;
+        height: 400px;
+        margin: auto;
+        border: 3px solid #3696F7;
+    }
+</style>
+
+<h1 class="text-center page-header">
+    Transaction Records
+</h1>
+@Html.AntiForgeryToken()
+    @foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="bordered-container">
+                <span class="border-title">Balance</span>
+                @*new values*@
+
+                <div class="form-group">
+                    @*<label for="ClientList" id="ClientList" class="control-label col-md-2 no-padding-right">User Balance = </label>*@
+                    @*<div class="box1 col-md-2">*@
+                    User Balance = @Html.DisplayFor(modelItem => item.userBalance)
+                    @*</div>*@
+                    <br />
+                    @*<label for="VendorList" class="control-label col-md-3 no-padding-right">Vendor Balance = </label>*@
+                    @*<div class="box1 col-md-2">*@
+                    Vendor Balance = @Html.DisplayFor(modelItem => item.vendorBalance)
+                    @*</div>*@
+                    <br />
+                    @*<label for="ClientList" class="control-label col-md-1 no-padding-right">Distributor Balance = </label>*@
+                    @*<div class="box1 col-md-2">*@
+                    Distributor Balance = @Html.DisplayFor(modelItem => item.distributorBalance)
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <div class="bordered-container">
+                <span class="border-title">Today's Transaction</span>
+                <div class="bordered-container-inner">
+                    Total Transaction = @Html.DisplayFor(modelItem => item.totalTransaction)
+                    <br />
+                    @*<div class="form-group">
+                        @*<div class="box1 col-md-4">*@
+                    Top-Up = @Html.DisplayFor(modelItem => item.topupTransaction)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-4">*@
+                    Money Transfer = @Html.DisplayFor(modelItem => item.moneyTransferTransaction)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-4">*@
+                    Return Balance = @Html.DisplayFor(modelItem => item.returnBalance)
+                    @*</div>*@
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <div class="bordered-container">
+                <span class="border-title">Pin History</span>
+                <div class="bordered-container-inner">
+                    @*<div class="box1 col-md-2">*@
+                    Pin Number = @Html.DisplayFor(modelItem => item.pinNumber)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-2">*@
+                    Active Pin = @Html.DisplayFor(modelItem => item.activePinNumber)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-2">*@
+                    Active Pin Balance = @Html.DisplayFor(modelItem => item.activePinBalance)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-2">*@
+                    Used Pin Number = @Html.DisplayFor(modelItem => item.usedPinNumber)
+                    @*</div>*@
+                    <br />
+                    @*<div class="box1 col-md-2">*@
+                    Used Pin Balance = @Html.DisplayFor(modelItem => item.usedPinBalance)
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*</div>*@
+<br />
+<label class="control-label col-md-2 no-padding-right ">&nbsp;</label>
+<div class="VendorBalancePieChart">
+    <span class="border-title">Vendor Balance</span>
+    <div class="chartPie">
+        <canvas id="pieChartLoc" width="300" height="200"></canvas>
+        <script>
+                @foreach (var list in Model) {
+                    <text>
+                    var babulslt = @ViewBag.babulslt;
+                    var ezzeTopUp = @ViewBag.ezzeTopUp;
+                    var AbrarTel = @ViewBag.AbrarTel;
+                    //var Swift = @ViewBag.Swift;
+
+                    //int[] a = @ViewBag.Deducted;
+
+                    var ChartData = [
+                        {
+                            value: babulslt, //@list.PinAmount,
+                            color: "#ff3399",
+                            label: "babulslt"
+
+                        },
+                        {
+                            value: ezzeTopUp,
+                            color: "red",
+                            label: "ezze TopUp"
+                        },
+                        {
+                            value: AbrarTel,
+                            color: "lightblue",
+                            label: "AbrarTel"
+                        }
+                        //,
+                        //{
+                        //    value: Swift,
+                        //    color: "gray",
+                        //    label: "Swift"
+                        //}
+                    ]
+                    var myPie = new Chart(document.getElementById("pieChartLoc").getContext("2d")).Pie(ChartData);
+                    </text>
+                }
+        </script>
+    </div>
+</div>

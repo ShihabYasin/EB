@@ -1,0 +1,37 @@
+Release 2.2.0
+Release Date - 13/02/2015
+
+Changes in Feature
+---------------------
+1. Distributor
+	Commission Rateplan
+	Pins
+	Transactions
+	Cash In
+
+2. PinHistory - keeps all create, update data of pins
+3. Sends updated status of transactions while update of clientId = 501, to smsManager
+4. Pin - Cost added for each service
+
+////////////////////////////////////////////////////////////
+
+Changes in files
+---------------------
+1. DistributorRepository - newly added
+	holds access to - DISTRIBUTORS
+					  DISTRIBUTOR_TRANSACTIONS
+					  DISTRIBUTOR_COMMISSION_RATEPLANS
+					  ASSIGN_DISTRIBUTOR_COMMISSION_RATEPLANS
+
+2. PinController
+	keeps PinHistory
+
+3. UserController
+	TopUp - GET  - data to send to api has changed
+	TopUp - POST - calculates distributorTransactionCharge
+	MoneyTransfer - GET  - data to send to api has changed
+	MoneyTransfer - POST - calculates distributorTransactionCharge
+	VoucherRecharge - POST - checks if the pin is assigned to any Retailer Distributor
+
+4. Pins
+	Cost - minimum cost for the service. MRP of the service cannot be less than Cost
